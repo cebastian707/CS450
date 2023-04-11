@@ -1,7 +1,7 @@
 .SUFFIXES: .o .cpp .x
 
 CFLAGS = -ggdb -std=c++20
-objects =  Token.o Tokenizer.o Parser.o ArithExpr.o SymTab.o Statements.o main.o
+objects =  Token.o Tokenizer.o Parser.o ExprNode.o SymTab.o Statements.o main.o
 
 statement.x: $(objects)
 	g++ $(CFLAGS) -o statement.x $(objects)
