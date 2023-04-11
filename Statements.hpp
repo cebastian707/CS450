@@ -62,4 +62,13 @@ private:
     ExprNode *_rhsExpression;
 };
 
+class PrintStatement : public Statement {
+    public:
+    PrintStatement();
+
+
+    private:
+        std::string _printStatement;
+};
+
 #endif //APYTHONINTERPRETER_STATEMENTS_HPP
