@@ -18,7 +18,6 @@ std::string Tokenizer::readName() {
     }
     if(inStream.good())  // In the loop, we have read one char too many.
         inStream.putback(c);
-    std::cout << name;
     return name;
 }
 
@@ -51,6 +50,7 @@ Token Tokenizer::getToken() {
     while( inStream.get(c) && isspace(c) && c != '\n' )  // Skip spaces but not new-line chars.
         ;
     */
+
     while( inStream.get(c) && isspace(c) )  // Skip spaces including the new-line chars.
         ;
 
@@ -59,18 +59,14 @@ Token Tokenizer::getToken() {
         exit(1);
     }
 
-        std::cout << "c = " << c << std::endl;
+    //    std::cout << "c = " << c << std::endl;
 
     Token token;
     if( inStream.eof()) {
         token.eof() = true;
-    }
-    /*
-    else if( c == '\n' ) {  // will not ever be the case unless new-line characters are not supressed.
+    } else if( c == '\n' ) {  // will not ever be the case unless new-line characters are not supressed.
         token.eol() = true;
-        }*/
-
-    if( isdigit(c) ) { // a integer?
+    } else if( isdigit(c) ) { // a integer?
         // put the digit back into the input stream so
         // we read the entire number in a function
         inStream.putback(c);

@@ -30,3 +30,4 @@ void SymTab::print() {
     for(auto [var, value] : symTab )
         std::cout << var << " = " << value << std::endl;
 }
+
