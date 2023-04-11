@@ -24,7 +24,7 @@ int InfixExprNode::evaluate(SymTab &symTab) {
     int rValue = right()->evaluate(symTab);
     if(debug)
         std::cout << "InfixExprNode::evaluate: " << lValue << " " <<
-                  token().symbol() << " " << rValue << std::endl;
+            token().symbol() << " " << rValue << std::endl;
     if( token().isAdditionOperator() )
         return lValue + rValue;
     else if(token().isSubtractionOperator())

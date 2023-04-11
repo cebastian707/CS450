@@ -57,12 +57,10 @@ AssignmentStatement *Parser::assignStatement() {
         die("Parser::assignStatement", "Expected an equal sign, instead got", assignOp);
 
     ArithExprNode *rightHandSideExpr = expr();
-    Token tok = tokenizer.getToken();
+    // Token tok = tokenizer.getToken();
+    // if (!tok.isSemiColon())
+    //     die("Parser::assignStatement", "Expected a semicolon, instead got", tok);
 
-    /*
-    if (!tok.isSemiColon())
-        die("Parser::assignStatement", "Expected a semicolon, instead got", tok);
-    */
     return new AssignmentStatement(varName.getName(), rightHandSideExpr);
 }
 
@@ -133,5 +131,3 @@ ArithExprNode *Parser::primary() {
 
     return nullptr;  // Will not reach this statement!
 }
-
-

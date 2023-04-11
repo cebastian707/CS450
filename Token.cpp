@@ -19,7 +19,14 @@ void Token::print() const {
     else if( isSubtractionOperator() )  std::cout << " - " ;
     else if( isModuloOperator() )  std::cout << " % " ;
     else if( isDivisionOperator() )  std::cout << " / " ;
+    else if( isGreaterThanOperator() ) std::cout << " > ";
+    else if( isLessThanOperator() )  std::cout << " < ";
+    else if( isEqualToOperator() ) std::cout << " == ";
+    else if( isGreaterThanEqualOperator() ) std::cout << " >= ";
+    else if( isLessThanEqualOperator() ) std::cout << " <= ";
+    else if( notEqualOperator() ) std::cout << " != ";
     else if( isName() )  std::cout << getName();
     else if( isWholeNumber() ) std::cout << getWholeNumber();
     else std::cout << "Uninitialized token.\n";
+
 }

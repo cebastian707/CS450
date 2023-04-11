@@ -38,6 +38,22 @@ public:
                isModuloOperator() ||
                isDivisionOperator();
     }
+    bool isGreaterThanOperator() const {return _symbol == '>';}
+    bool isLessThanOperator() const {return _symbol == '<';}
+    bool isEqualToOperator()  const {return _longSymbol == "==";}
+    bool isGreaterThanEqualOperator() const {return _longSymbol == ">=";}
+    bool isLessThanEqualOperator() const {return _longSymbol == "<=";}
+    bool notEqualOperator() const {return _longSymbol == "!=";}
+    bool isRelationalOperator() const {
+            return isGreaterThanOperator() ||
+                   isLessThanOperator() ||
+                   isEqualToOperator () ||
+                   isGreaterThanEqualOperator() ||
+                   isLessThanEqualOperator() ||
+                   notEqualOperator();
+
+
+    }
     bool isName() const                   { return _name.length() > 0; }
     std::string getName() const                  { return _name; }
     void setName(std::string n) { _name = n; }
@@ -57,6 +73,7 @@ private:
     bool _eof, _eol;
     bool _isWholeNumber;
     char _symbol;
+    std::string _longSymbol;
     int _wholeNumber;
 };
 

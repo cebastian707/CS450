@@ -1,6 +1,6 @@
-cmake_minimum_required(VERSION 3.23)
-project(python)
+cmake_minimum_required(VERSION 3.24)
+project(APythonInterpreter)
 
 set(CMAKE_CXX_STANDARD 20)
 
-add_executable(python main.cpp Token.cpp ArithExpr.cpp Parser.cpp Statments.cpp SymTab.cpp Tokenizer.cpp)
+add_executable(APythonInterpreter main.cpp Token.cpp Token.hpp Tokenizer.cpp Tokenizer.hpp Parser.cpp Parser.hpp ArithExpr.cpp ArithExpr.hpp SymTab.cpp SymTab.hpp Statements.cpp Statements.hpp)
