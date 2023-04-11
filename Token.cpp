@@ -27,6 +27,7 @@ void Token::print() const {
     else if( notEqualOperator() ) std::cout << " != ";
     else if( isName() )  std::cout << getName();
     else if( isWholeNumber() ) std::cout << getWholeNumber();
+    else if ( isKeyword() ) std::cout << getKeyWord();
     else std::cout << "Uninitialized token.\n";
 
 }

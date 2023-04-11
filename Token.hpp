@@ -51,16 +51,16 @@ public:
                    isGreaterThanEqualOperator() ||
                    isLessThanEqualOperator() ||
                    notEqualOperator();
-
-
     }
     bool isName() const                   { return _name.length() > 0; }
+    bool isKeyword() const { return _keyWord == "for" || _keyWord == "print";}
     std::string getName() const                  { return _name; }
     void setName(std::string n) { _name = n; }
 
     bool &isWholeNumber() { return _isWholeNumber; }
     bool isWholeNumber() const { return _isWholeNumber; }
     int getWholeNumber() const { return _wholeNumber; }
+    std::string getKeyWord() const {return _keyWord;}
     void setWholeNumber(int n) {
         _wholeNumber = n;
         isWholeNumber() = true;
@@ -75,6 +75,7 @@ private:
     char _symbol;
     std::string _longSymbol;
     int _wholeNumber;
+    std::string _keyWord;
 };
 
 
