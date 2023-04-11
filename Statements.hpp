@@ -8,7 +8,7 @@
 #include <iostream>
 #include <vector>
 
-#include "ArithExpr.hpp"
+#include "ExprNode.hpp"
 #include "SymTab.hpp"
 
 // The Statement (abstract) class serves as a super class for all statements that
@@ -49,17 +49,17 @@ private:
 class AssignmentStatement : public Statement {
 public:
     AssignmentStatement();
-    AssignmentStatement(std::string lhsVar, ArithExprNode *rhsExpr);
+    AssignmentStatement(std::string lhsVar, ExprNode *rhsExpr);
 
     std::string &lhsVariable();
-    ArithExprNode *&rhsExpression();
+    ExprNode *&rhsExpression();
 
     virtual void evaluate(SymTab &symTab);
     virtual void print();
 
 private:
     std::string _lhsVariable;
-    ArithExprNode *_rhsExpression;
+    ExprNode *_rhsExpression;
 };
 
 #endif //APYTHONINTERPRETER_STATEMENTS_HPP

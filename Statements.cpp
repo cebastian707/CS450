@@ -26,7 +26,7 @@ void Statements::evaluate(SymTab &symTab) {
 
 AssignmentStatement::AssignmentStatement() : _lhsVariable{""}, _rhsExpression{nullptr} {}
 
-AssignmentStatement::AssignmentStatement(std::string lhsVar, ArithExprNode *rhsExpr):
+AssignmentStatement::AssignmentStatement(std::string lhsVar, ExprNode *rhsExpr):
         _lhsVariable{lhsVar}, _rhsExpression{rhsExpr} {}
 
 void AssignmentStatement::evaluate(SymTab &symTab) {
@@ -38,7 +38,7 @@ std::string &AssignmentStatement::lhsVariable() {
     return _lhsVariable;
 }
 
-ArithExprNode *&AssignmentStatement::rhsExpression() {
+ExprNode *&AssignmentStatement::rhsExpression() {
     return _rhsExpression;
 }
 

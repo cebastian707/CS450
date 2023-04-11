@@ -56,7 +56,7 @@ AssignmentStatement *Parser::assignStatement() {
     if (!assignOp.isAssignmentOperator())
         die("Parser::assignStatement", "Expected an equal sign, instead got", assignOp);
 
-    ArithExprNode *rightHandSideExpr = expr();
+    ExprNode *rightHandSideExpr = expr();
     // Token tok = tokenizer.getToken();
     // if (!tok.isSemiColon())
     //     die("Parser::assignStatement", "Expected a semicolon, instead got", tok);
@@ -64,7 +64,7 @@ AssignmentStatement *Parser::assignStatement() {
     return new AssignmentStatement(varName.getName(), rightHandSideExpr);
 }
 
-ArithExprNode *Parser::expr() {
+ExprNode *Parser::expr() {
     // This function parses the grammar rules:
 
     // <expr> -> <term> { <add_op> <term> }
@@ -72,7 +72,7 @@ ArithExprNode *Parser::expr() {
 
     // However, it makes the <add_op> left associative.
 
-    ArithExprNode *left = term();
+    ExprNode *left = term();
     Token tok = tokenizer.getToken();
     while (tok.isAdditionOperator() || tok.isSubtractionOperator()) {
         InfixExprNode *p = new InfixExprNode(tok);
@@ -86,14 +86,14 @@ ArithExprNode *Parser::expr() {
 }
 
 
-ArithExprNode *Parser::term() {
+ExprNode *Parser::term() {
     // This function parses the grammar rules:
 
     // <term> -> <primary> { <mult_op> <primary> }
     // <mult_op> -> * | / | %
 
     // However, the implementation makes the <mult-op> left associate.
-    ArithExprNode *left = primary();
+    ExprNode *left = primary();
     Token tok = tokenizer.getToken();
 
     while (tok.isMultiplicationOperator() || tok.isDivisionOperator() || tok.isModuloOperator()) {
@@ -107,7 +107,7 @@ ArithExprNode *Parser::term() {
     return left;
 }
 
-ArithExprNode *Parser::primary() {
+ExprNode *Parser::primary() {
     // This function parses the grammar rules:
 
     // <primary> -> [0-9]+
@@ -121,7 +121,7 @@ ArithExprNode *Parser::primary() {
     else if( tok.isName() )
         return new Variable(tok);
     else if (tok.isOpenParen()) {
-        ArithExprNode *p = expr();
+        ExprNode *p = expr();
         Token token = tokenizer.getToken();
         if (!token.isCloseParen())
             die("Parser::primary", "Expected close-parenthesis, instead got", token);

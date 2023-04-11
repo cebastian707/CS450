@@ -8,7 +8,7 @@
 #include "Token.hpp"
 #include "Tokenizer.hpp"
 #include "SymTab.hpp"
-#include "ArithExpr.hpp"
+#include "ExprNode.hpp"
 #include "Statements.hpp"
 
 #include<vector>
@@ -24,9 +24,9 @@ public:
 
     AssignmentStatement *assignStatement();
 
-    ArithExprNode *expr();
-    ArithExprNode *term();
-    ArithExprNode *primary();
+    ExprNode *expr();
+    ExprNode *term();
+    ExprNode *primary();
 
     std::string id();
 

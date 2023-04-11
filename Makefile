@@ -12,11 +12,11 @@ statement.x: $(objects)
 
 Token.o:  Token.cpp Token.hpp
 Tokenizer.o: Tokenizer.cpp Tokenizer.hpp
-ArithExpr.o: ArithExpr.cpp ArithExpr.hpp Token.hpp SymTab.hpp
+ArithExpr.o: ExprNode.cpp ExprNode.hpp Token.hpp SymTab.hpp
 SymTab.o: SymTab.cpp SymTab.hpp
-Parser.o: Parser.cpp Token.hpp Parser.hpp Tokenizer.hpp SymTab.hpp ArithExpr.hpp Statements.hpp
-Statements.o: Statements.cpp Statements.hpp ArithExpr.hpp Token.hpp SymTab.hpp
-main.o: main.cpp Token.hpp Tokenizer.hpp Parser.hpp SymTab.hpp ArithExpr.hpp Statements.hpp
+Parser.o: Parser.cpp Token.hpp Parser.hpp Tokenizer.hpp SymTab.hpp ExprNode.hpp Statements.hpp
+Statements.o: Statements.cpp Statements.hpp ExprNode.hpp Token.hpp SymTab.hpp
+main.o: main.cpp Token.hpp Tokenizer.hpp Parser.hpp SymTab.hpp ExprNode.hpp Statements.hpp
 
 clean:
 	rm -fr *.o *~ *.x
