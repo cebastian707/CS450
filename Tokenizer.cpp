@@ -72,8 +72,14 @@ Token Tokenizer::getToken() {
         inStream.putback(c);
         token.setWholeNumber( readInteger() );
 
-    } else if( c == '=' )
+    }
+
+    else if (c == '>=' || c == '==' || c == '<=' || c == '>' || c == '<' || c == '!=')
         token.symbol(c);
+
+    else if( c == '=' )
+        token.symbol(c);
+
     else if( c == '+' || c == '-' || c == '*' || c == '/' || c == '%')
         token.symbol(c);
     else if( c == ';' )

@@ -68,6 +68,7 @@ public:
 
     void print() const;
 
+
 private:
     std::string _name;
     bool _eof, _eol;
