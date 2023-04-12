@@ -10,6 +10,7 @@ Statement::Statement() {}
 // Statements
 
 Statements::Statements() {}
+
 void Statements::addStatement(Statement *statement) { _statements.push_back(statement); }
 
 void Statements::print() {

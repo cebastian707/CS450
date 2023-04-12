@@ -29,5 +29,4 @@ void Token::print() const {
     else if( isWholeNumber() ) std::cout << getWholeNumber();
     else if ( isKeyword() ) std::cout << getKeyWord();
     else std::cout << "Uninitialized token.\n";
-
 }
