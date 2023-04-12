@@ -35,6 +35,11 @@ private:
 
     void die(std::string where, std::string message, Token &token);
 
+    ExprNode *rel_primary();
+
+    ExprNode *rel_term();
+
+    ExprNode *rel_expr();
 };
 
 

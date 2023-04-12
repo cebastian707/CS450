@@ -35,6 +35,19 @@ int InfixExprNode::evaluate(SymTab &symTab) {
         return lValue / rValue; // division by zero?
     else if( token().isModuloOperator() )
         return lValue % rValue;
+    else if(token().isLessThanOperator())
+        return lValue < rValue;
+    else if (token().isLessThanEqualOperator())
+        return lValue <= rValue;
+    else if(token().isGreaterThanOperator())
+        return lValue > rValue;
+    else if (token().isGreaterThanEqualOperator())
+        return lValue >= rValue;
+    else if (token().isEqualToOperator())
+        return lValue == rValue;
+    else if(token().notEqualOperator())
+        return lValue != rValue;
+
     else {
         std::cout << "InfixExprNode::evaluate: don't know how to evaluate this operator\n";
         token().print();

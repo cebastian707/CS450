@@ -96,7 +96,7 @@ ExprNode *Parser::term() {
     ExprNode *left = primary();
     Token tok = tokenizer.getToken();
 
-    while (tok.isMultiplicationOperator() || tok.isDivisionOperator() || tok.isModuloOperator()) {
+    while ( tok.isGreaterThanEqualOperator() || tok.isGreaterThanOperator()  || tok.isLessThanEqualOperator()  || tok.isLessThanOperator() || tok.isMultiplicationOperator() || tok.isDivisionOperator() || tok.isModuloOperator()) {
         InfixExprNode *p = new InfixExprNode(tok);
         p->left() = left;
         p->right() = primary();
@@ -107,27 +107,77 @@ ExprNode *Parser::term() {
     return left;
 }
 
+
 ExprNode *Parser::primary() {
     // This function parses the grammar rules:
 
     // <primary> -> [0-9]+
     // <primary> -> [_a-zA-Z]+
     // <primary> -> (<expr>)
+    // <primary> -> <rel-expr>
 
     Token tok = tokenizer.getToken();
 
-    if (tok.isWholeNumber() )
+    if (tok.isWholeNumber()) {
         return new WholeNumber(tok);
-    else if( tok.isName() )
+    } else if (tok.isName()) {
         return new Variable(tok);
-    else if (tok.isOpenParen()) {
+    } else if (tok.isOpenParen()) {
         ExprNode *p = expr();
         Token token = tokenizer.getToken();
         if (!token.isCloseParen())
             die("Parser::primary", "Expected close-parenthesis, instead got", token);
         return p;
+    } else {
+        tokenizer.ungetToken();
+        return rel_expr();
     }
-    die("Parser::primary", "Unexpected token", tok);
+}
 
-    return nullptr;  // Will not reach this statement!
+ExprNode *Parser::rel_expr() {
+    // This function parses the grammar rules:
+
+    // <rel-expr> -> <rel-term> {(==, !=) <rel-term>}
+    // <rel-term> -> <rel-primary> {(>, >=, <, <=) <rel-primary>}
+    // <rel-primary> -> <arith-expr>
+
+    ExprNode *left = rel_term();
+    Token tok = tokenizer.getToken();
+
+    while (tok.isEqualToOperator() || tok.notEqualOperator()) {
+        InfixExprNode *p = new InfixExprNode(tok);
+        p->left() = left;
+        p->right() = rel_term();
+        left = p;
+        tok = tokenizer.getToken();
+    }
+    tokenizer.ungetToken();
+    return left;
+}
+
+
+ExprNode *Parser::rel_term() {
+    // This function parses the grammar rules:
+
+    // <rel-term> -> <rel-primary> {(>, >=, <, <=) <rel-primary>}
+    // <rel-primary> -> <arith-expr>
+
+    ExprNode *left = rel_primary();
+    Token tok = tokenizer.getToken();
+
+    while (tok.isGreaterThanEqualOperator() || tok.isGreaterThanOperator() || tok.isLessThanOperator() || tok.isLessThanEqualOperator()) {
+        InfixExprNode *p = new InfixExprNode(tok);
+        p->left() = left;
+        p->right() = rel_primary();
+        left = p;
+        tok = tokenizer.getToken();
+    }
+    tokenizer.ungetToken();
+    return left;
+}
+
+ExprNode *Parser::rel_primary() {
+    // This function parses the grammar rules:
+    // <rel-primary> -> <arith-expr>
+    return expr();
 }

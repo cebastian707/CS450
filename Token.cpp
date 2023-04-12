@@ -28,5 +28,4 @@ void Token::print() const {
     else if( isName() )  std::cout << getName();
     else if( isWholeNumber() ) std::cout << getWholeNumber();
     else std::cout << "Uninitialized token.\n";
-
 }
