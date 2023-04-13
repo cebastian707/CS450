@@ -23,8 +23,12 @@ public:
 
     void symbol(char c) { _symbol = c; }
     char symbol() { return _symbol; }
-    std::string long_symbol()const{return _relationalSymbol ;}
-    void realtional_symbol(std::string std){_relationalSymbol  = std;}
+
+
+    void relationalSymbol(std::string str) {_relationalSymbol = str;}
+    std::string relationalSymbol() {return _relationalSymbol;}
+
+
     bool isSemiColon() const { return _symbol == ';'; }
     bool isAssignmentOperator() const              { return _symbol == '='; }
     bool isMultiplicationOperator() const { return _symbol == '*'; }
@@ -41,10 +45,12 @@ public:
     }
     bool isGreaterThanOperator() const {return _symbol == '>';}
     bool isLessThanOperator() const {return _symbol == '<';}
-    bool isEqualToOperator()  const {return _relationalSymbol  == "==";}
-    bool isGreaterThanEqualOperator() const {return _relationalSymbol  == ">=";}
-    bool isLessThanEqualOperator() const {return _relationalSymbol  == "<=";}
-    bool notEqualOperator() const {return _relationalSymbol  == "!=";}
+
+    bool isEqualToOperator()  const {return _relationalSymbol == "==";}
+    bool isGreaterThanEqualOperator() const {return _relationalSymbol == ">=";}
+    bool isLessThanEqualOperator() const {return _relationalSymbol == "<=";}
+    bool notEqualOperator() const {return _relationalSymbol == "!=";}
+
     bool isRelationalOperator() const {
             return isGreaterThanOperator() ||
                    isLessThanOperator() ||
@@ -52,16 +58,16 @@ public:
                    isGreaterThanEqualOperator() ||
                    isLessThanEqualOperator() ||
                    notEqualOperator();
-
-
     }
     bool isName() const                   { return _name.length() > 0; }
+    bool isKeyword() const { return _keyWord == "for" || _keyWord == "print";}
     std::string getName() const                  { return _name; }
     void setName(std::string n) { _name = n; }
 
     bool &isWholeNumber() { return _isWholeNumber; }
     bool isWholeNumber() const { return _isWholeNumber; }
     int getWholeNumber() const { return _wholeNumber; }
+    std::string getKeyWord() const {return _keyWord;}
     void setWholeNumber(int n) {
         _wholeNumber = n;
         isWholeNumber() = true;
@@ -75,8 +81,11 @@ private:
     bool _eof, _eol;
     bool _isWholeNumber;
     char _symbol;
-    std::string _relationalSymbol ;
+
+    std::string _relationalSymbol;
+
     int _wholeNumber;
+    std::string _keyWord;
 };
 
 

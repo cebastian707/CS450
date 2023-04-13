@@ -48,3 +48,7 @@ void AssignmentStatement::print() {
     _rhsExpression->print();
     std::cout << std::endl;
 }
+
+PrintStatement::PrintStatement()
+{
+}
