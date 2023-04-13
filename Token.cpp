@@ -5,7 +5,7 @@
 #include <iostream>
 #include "Token.hpp"
 
-Token::Token(): _name{""}, _eof{false}, _eol{false}, _symbol{'\0'}, _isWholeNumber{false} {}
+Token::Token(): _name{""}, _eof{false}, _eol{false}, _symbol{'\0'}, _relationalSymbol ("\0"), _isWholeNumber{false} {}
 
 void Token::print() const {
     if( eol() ) std::cout << "EOL\n" ;

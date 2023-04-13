@@ -23,7 +23,8 @@ public:
 
     void symbol(char c) { _symbol = c; }
     char symbol() { return _symbol; }
-
+    std::string long_symbol()const{return _relationalSymbol ;}
+    void realtional_symbol(std::string std){_relationalSymbol  = std;}
     bool isSemiColon() const { return _symbol == ';'; }
     bool isAssignmentOperator() const              { return _symbol == '='; }
     bool isMultiplicationOperator() const { return _symbol == '*'; }
@@ -40,10 +41,10 @@ public:
     }
     bool isGreaterThanOperator() const {return _symbol == '>';}
     bool isLessThanOperator() const {return _symbol == '<';}
-    bool isEqualToOperator()  const {return _longSymbol == "==";}
-    bool isGreaterThanEqualOperator() const {return _longSymbol == ">=";}
-    bool isLessThanEqualOperator() const {return _longSymbol == "<=";}
-    bool notEqualOperator() const {return _longSymbol == "!=";}
+    bool isEqualToOperator()  const {return _relationalSymbol  == "==";}
+    bool isGreaterThanEqualOperator() const {return _relationalSymbol  == ">=";}
+    bool isLessThanEqualOperator() const {return _relationalSymbol  == "<=";}
+    bool notEqualOperator() const {return _relationalSymbol  == "!=";}
     bool isRelationalOperator() const {
             return isGreaterThanOperator() ||
                    isLessThanOperator() ||
@@ -74,7 +75,7 @@ private:
     bool _eof, _eol;
     bool _isWholeNumber;
     char _symbol;
-    std::string _longSymbol;
+    std::string _relationalSymbol ;
     int _wholeNumber;
 };
 
