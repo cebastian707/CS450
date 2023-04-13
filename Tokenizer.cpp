@@ -79,7 +79,7 @@ Token Tokenizer::getToken() {
         char d = inStream.peek();
         if (d == '=') {
             inStream.get(d);
-            token.realtional_symbol("==");
+            token.relationalSymbol("==");
         } else {
             token.symbol(c);
         }
@@ -87,7 +87,7 @@ Token Tokenizer::getToken() {
         char d = inStream.peek();
         if (d == '='){
             inStream.get(d);
-            token.realtional_symbol(">=");
+            token.relationalSymbol(">=");
         }
         else{
             token.symbol(c);
@@ -97,7 +97,7 @@ Token Tokenizer::getToken() {
         char hola = inStream.peek();
         if (hola == '='){
             inStream.get(hola);
-            token.realtional_symbol("<=");
+            token.relationalSymbol("<=");
         }
         else{
             token.symbol(c);
@@ -107,7 +107,7 @@ Token Tokenizer::getToken() {
         char como = inStream.peek();
         if (como == '='){
             inStream.get(como);
-            token.realtional_symbol("!=");
+            token.relationalSymbol("!=");
         } else{
             token.symbol(c);
         }
