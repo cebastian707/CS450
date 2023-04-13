@@ -38,6 +38,8 @@ int Tokenizer::readInteger() {
 
 Tokenizer::Tokenizer(std::ifstream &stream): ungottenToken{false}, inStream{stream}, lastToken{} {}
 
+
+
 Token Tokenizer::getToken() {
 
     if(ungottenToken) {
@@ -59,7 +61,8 @@ Token Tokenizer::getToken() {
         exit(1);
     }
 
-    //    std::cout << "c = " << c << std::endl;
+
+    //std::cout << "c = " << c << std::endl;
 
     Token token;
     if( inStream.eof()) {
@@ -72,20 +75,56 @@ Token Tokenizer::getToken() {
         inStream.putback(c);
         token.setWholeNumber( readInteger() );
 
+    } else if( c == '=' ) {
+        char d = inStream.peek();
+        if (d == '=') {
+            inStream.get(d);
+            token.realtional_symbol("==");
+        } else {
+            token.symbol(c);
+        }
+    } else if(c == '>'){
+        char d = inStream.peek();
+        if (d == '='){
+            inStream.get(d);
+            token.realtional_symbol(">=");
+        }
+        else{
+            token.symbol(c);
+        }
+    }
+    else if (c == '<'){
+        char hola = inStream.peek();
+        if (hola == '='){
+            inStream.get(hola);
+            token.realtional_symbol("<=");
+        }
+        else{
+            token.symbol(c);
+        }
+
+    } else if(c == '!'){
+        char como = inStream.peek();
+        if (como == '='){
+            inStream.get(como);
+            token.realtional_symbol("!=");
+        } else{
+            token.symbol(c);
+        }
     }
 
-    else if (c == '>=' || c == '==' || c == '<=' || c == '>' || c == '<' || c == '!=')
+    else if( c == '+' || c == '-' || c == '*' || c == '/' || c == '%') {
         token.symbol(c);
+    }
 
-    else if( c == '=' )
+    else if( c == ';' ) {
         token.symbol(c);
+    }
 
-    else if( c == '+' || c == '-' || c == '*' || c == '/' || c == '%')
+    else if( c == '(' || c == ')') {
         token.symbol(c);
-    else if( c == ';' )
-        token.symbol(c);
-    else if( c == '(' || c == ')')
-        token.symbol(c);
+    }
+
     else if(isalpha(c)) {  // an identifier?
         // put c back into the stream so we can read the entire name in a function.
         inStream.putback(c);
@@ -97,6 +136,7 @@ Token Tokenizer::getToken() {
     _tokens.push_back(token);
     return lastToken = token;
 }
+
 
 void Tokenizer::ungetToken() {
     ungottenToken = true;

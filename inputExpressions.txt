@@ -1,1 +1,6 @@
-size = 100 == 100
+isGreater = 5 > 3
+isLess = 10 < 5
+isEqual = 7 == 7
+notEqual = 10 != 5
+isGreaterOrEqual = 7 >= 7
+isLessOrEqual = 10 <= 5
