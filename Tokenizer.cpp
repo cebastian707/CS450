@@ -18,6 +18,7 @@ std::string Tokenizer::readName() {
     }
     if(inStream.good())  // In the loop, we have read one char too many.
         inStream.putback(c);
+
     return name;
 }
 
@@ -128,7 +129,13 @@ Token Tokenizer::getToken() {
     else if(isalpha(c)) {  // an identifier?
         // put c back into the stream so we can read the entire name in a function.
         inStream.putback(c);
-        token.setName( readName() );
+        std::string name = readName();
+        if (name == "print" || name == "for"){
+            token.setkeyword(name);
+        }
+        else{
+            token.setName(name);
+        }
     } else {
         std::cout << "Unknown character in input. ->" << c << "<-" << std::endl;
         exit(1);

@@ -60,14 +60,19 @@ public:
                    notEqualOperator();
     }
     bool isName() const                   { return _name.length() > 0; }
-    bool isKeyword() const { return _keyWord == "for" || _keyWord == "print";}
+    bool &isKeyword() { return _iskeyWord;}
     std::string getName() const                  { return _name; }
     void setName(std::string n) { _name = n; }
 
     bool &isWholeNumber() { return _isWholeNumber; }
     bool isWholeNumber() const { return _isWholeNumber; }
     int getWholeNumber() const { return _wholeNumber; }
-    std::string getKeyWord() const {return _keyWord;}
+    std::string getkeyword(){return _keyword;}
+    void setkeyword(std::string key){
+        _keyword = key;
+        isKeyword() = true;
+    }
+
     void setWholeNumber(int n) {
         _wholeNumber = n;
         isWholeNumber() = true;
@@ -81,11 +86,10 @@ private:
     bool _eof, _eol;
     bool _isWholeNumber;
     char _symbol;
-
     std::string _relationalSymbol;
-
     int _wholeNumber;
-    std::string _keyWord;
+    bool _iskeyWord = false;
+    std::string _keyword;
 };
 
 

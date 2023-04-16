@@ -49,6 +49,5 @@ void AssignmentStatement::print() {
     std::cout << std::endl;
 }
 
-PrintStatement::PrintStatement()
-{
-}
+
+std::string &PrintStatement::lhsVariable() { return _lhsVariable; }

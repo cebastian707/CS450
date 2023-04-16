@@ -22,7 +22,8 @@ public:
 
     Statements *statements();
 
-    AssignmentStatement *assignStatement();
+    Statement *assignStatement();
+    ExprNode *print();
 
     ExprNode *expr();
     ExprNode *term();

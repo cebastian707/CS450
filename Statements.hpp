@@ -20,7 +20,6 @@
 class Statement {
 public:
     Statement();
-
     virtual void print() = 0;
     virtual void evaluate(SymTab &symTab) = 0;
 
@@ -63,12 +62,22 @@ private:
 };
 
 class PrintStatement : public Statement {
-    public:
+public:
     PrintStatement();
+    PrintStatement(std::string lhsVar, ExprNode* expr) : _lhsVariable(lhsVar), _rhsExpression(expr) {}
 
+    std::string& lhsVariable();
+    ExprNode*& rhsExpression() { return _rhsExpression; }
 
-    private:
-        std::string _printStatement;
+    virtual void print() {
+    }
+
+    virtual void evaluate(SymTab& symTab) {
+        std::cout << "std::cout << " << _rhsExpression->evaluate(symTab) << " <<std::endl;" << std::endl;
+    }
+
+private:
+    std::string _lhsVariable;
+    ExprNode* _rhsExpression;
 };
-
 #endif //APYTHONINTERPRETER_STATEMENTS_HPP

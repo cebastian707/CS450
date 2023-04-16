@@ -33,9 +33,9 @@ Statements *Parser::statements() {
 
     Statements *stmts = new Statements();
     Token tok = tokenizer.getToken();
-    while (tok.isName()) {
+    while (tok.isName() || tok.isKeyword()) {
         tokenizer.ungetToken();
-        AssignmentStatement *assignStmt = assignStatement();
+        Statement *assignStmt = assignStatement();
         stmts->addStatement(assignStmt);
         tok = tokenizer.getToken();
     }
@@ -43,25 +43,32 @@ Statements *Parser::statements() {
     return stmts;
 }
 
-AssignmentStatement *Parser::assignStatement() {
+Statement *Parser::assignStatement() {
     // Parses the following grammar rule
     //
     // <assign-stmtement> -> <id> = <expr>
 
     Token varName = tokenizer.getToken();
-    if (!varName.isName())
-        die("Parser::assignStatement", "Expected a name token, instead got", varName);
+    if (!varName.isName()) {
+        // If the token is a keyword, parse a print statement instead
+        if (varName.isKeyword()) {
+            ExprNode *expr = print();
+            return new PrintStatement(varName.getkeyword(), expr);
+        } else {
+            die("Parser::assignStatement", "Expected a name token or keyword, instead got", varName);
+        }
+    }
 
     Token assignOp = tokenizer.getToken();
-    if (!assignOp.isAssignmentOperator())
+
+    if (!assignOp.isAssignmentOperator()) {
         die("Parser::assignStatement", "Expected an equal sign, instead got", assignOp);
+    }
 
     ExprNode *rightHandSideExpr = rel_expr();
-    // Token tok = tokenizer.getToken();
-    // if (!tok.isSemiColon())
-    //     die("Parser::assignStatement", "Expected a semicolon, instead got", tok);
 
     return new AssignmentStatement(varName.getName(), rightHandSideExpr);
+
 }
 
 ExprNode *Parser::expr() {
@@ -74,6 +81,8 @@ ExprNode *Parser::expr() {
 
     ExprNode *left = term();
     Token tok = tokenizer.getToken();
+
+
     while (tok.isAdditionOperator() || tok.isSubtractionOperator()) {
         InfixExprNode *p = new InfixExprNode(tok);
         p->left() = left;
@@ -84,7 +93,6 @@ ExprNode *Parser::expr() {
     tokenizer.ungetToken();
     return left;
 }
-
 
 ExprNode *Parser::term() {
     // This function parses the grammar rules:
@@ -107,7 +115,6 @@ ExprNode *Parser::term() {
     return left;
     //test
 }
-
 
 ExprNode *Parser::primary() {
     // This function parses the grammar rules:
@@ -144,7 +151,6 @@ ExprNode *Parser::rel_expr() {
 
     ExprNode *left = rel_term();
     Token tok = tokenizer.getToken();
-
     while (tok.isEqualToOperator() || tok.notEqualOperator()) {
         InfixExprNode *p = new InfixExprNode(tok);
         p->left() = left;
@@ -156,7 +162,6 @@ ExprNode *Parser::rel_expr() {
     return left;
 }
 
-
 ExprNode *Parser::rel_term() {
     // This function parses the grammar rules:
 
@@ -165,6 +170,7 @@ ExprNode *Parser::rel_term() {
 
     ExprNode *left = rel_primary();
     Token tok = tokenizer.getToken();
+
 
     while (tok.isGreaterThanEqualOperator() || tok.isGreaterThanOperator() || tok.isLessThanOperator() || tok.isLessThanEqualOperator()) {
         InfixExprNode *p = new InfixExprNode(tok);
@@ -181,4 +187,11 @@ ExprNode *Parser::rel_primary() {
     // This function parses the grammar rules:
     // <rel-primary> -> <arith-expr>
     return expr();
+}
+
+ExprNode *Parser::print() {
+
+    //Token tok = tokenizer.getToken();
+    ExprNode* p = primary();
+    return p;
 }

@@ -8,7 +8,7 @@
 void SymTab::setValueFor(const std::string &vName, int value) {
     // Define a variable by setting its initial value.
     if(debug)
-        std::cout << vName << " <- " << value << std::endl;
+        std::cout << vName << " -> " << value << std::endl;
     symTab[vName] = value;
 }
 

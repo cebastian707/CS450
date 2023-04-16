@@ -1,5 +1,9 @@
-yesNo = 100 > 20 > 40 - 23 + 3 * 3 - 2 == 30 + 5 >= 9 != 10 > 6
-
-
+fib0  = 0
+fib1  = 1
+sum2   = 2
+yesNo = (100 > 20) == (30 >= 10)
+print fib0
+print fib1
+print sum2
 
 
