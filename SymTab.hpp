@@ -21,7 +21,7 @@ public:
 
 private:
     std::map<std::string, int> symTab;
-    bool debug = false;
+    bool debug = true;
 };
 
 

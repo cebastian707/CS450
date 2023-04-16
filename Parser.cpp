@@ -56,7 +56,7 @@ AssignmentStatement *Parser::assignStatement() {
     if (!assignOp.isAssignmentOperator())
         die("Parser::assignStatement", "Expected an equal sign, instead got", assignOp);
 
-    ExprNode *rightHandSideExpr = expr();
+    ExprNode *rightHandSideExpr = rel_expr();
     // Token tok = tokenizer.getToken();
     // if (!tok.isSemiColon())
     //     die("Parser::assignStatement", "Expected a semicolon, instead got", tok);
@@ -98,7 +98,7 @@ ExprNode *Parser::term() {
 
     while (tok.notEqualOperator() || tok.isEqualToOperator() || tok.isGreaterThanEqualOperator() || tok.isGreaterThanOperator()  || tok.isLessThanEqualOperator()  || tok.isLessThanOperator() || tok.isMultiplicationOperator() || tok.isDivisionOperator() || tok.isModuloOperator()) {
         InfixExprNode *p = new InfixExprNode(tok);
-        p->left() = left;
+         p->left() = left;
         p->right() = primary();
         left = p;
         tok = tokenizer.getToken();
