@@ -87,6 +87,14 @@ public:
     ForStatement() {}
     ForStatement(AssignmentStatement* initStmt, ExprNode* condExpr, AssignmentStatement* updateExpr, Statements* body) :
             _initStatement(initStmt), _conditionExpression(condExpr), _updateExpression(updateExpr), _body(body) {}
+
+    ForStatement(Statement *pStatement, ExprNode *pNode, Statement *pStatement1, Statements *pStatements) {
+        _initStatement = dynamic_cast<AssignmentStatement *>(pStatement);
+        _conditionExpression = pNode;
+        _updateExpression = dynamic_cast<AssignmentStatement *>(pStatement1);
+        _body = pStatements;
+    }
+
     AssignmentStatement*& initStatement() { return _initStatement; }
     ExprNode*& conditionExpression() { return _conditionExpression; }
     AssignmentStatement*& updateExpression() { return _updateExpression; }
