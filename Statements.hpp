@@ -80,4 +80,46 @@ private:
     std::string _lhsVariable;
     ExprNode* _rhsExpression;
 };
+
+class ForStatement : public Statement {
+public:
+    ForStatement(AssignmentStatement* initStmt, ExprNode* condExpr, AssignmentStatement* updateExpr, Statements* body) :
+            _initStatement(initStmt), _conditionExpression(condExpr), _updateExpression(updateExpr), _body(body) {}
+
+    AssignmentStatement*& initStatement() { return _initStatement; }
+    ExprNode*& conditionExpression() { return _conditionExpression; }
+    AssignmentStatement*& updateExpression() { return _updateExpression; }
+    Statements*& body() { return _body; }
+
+    virtual void print() {
+        std::cout << "for (";
+        _initStatement->print();
+        std::cout << "; ";
+        _conditionExpression->print();
+        std::cout << "; ";
+        _updateExpression->print();
+        std::cout << ") {";
+        _body->print();
+        std::cout << "}";
+    }
+
+    virtual void evaluate(SymTab& symTab) {
+        _initStatement->evaluate(symTab);
+        while (_conditionExpression->evaluate(symTab) != 0) {
+            _body->evaluate(symTab);
+            _updateExpression->evaluate(symTab);
+        }
+    }
+
+private:
+    AssignmentStatement* _initStatement;
+    ExprNode* _conditionExpression;
+    AssignmentStatement* _updateExpression;
+    Statements* _body;
+};
+
+
+
+
+
 #endif //APYTHONINTERPRETER_STATEMENTS_HPP

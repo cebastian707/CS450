@@ -21,14 +21,12 @@ public:
     Parser(Tokenizer &tokenizer) : tokenizer{tokenizer} {}
 
     Statements *statements();
-
     Statement *assignStatement();
     ExprNode *print();
-
+    Statement * forstatement();
     ExprNode *expr();
     ExprNode *term();
     ExprNode *primary();
-
     std::string id();
 
 private:

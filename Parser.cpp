@@ -5,13 +5,11 @@
 
 #include<vector>
 #include<iostream>
-
 #include "Token.hpp"
 #include "Parser.hpp"
 #include "Statements.hpp"
 
 // Parser functions
-
 void Parser::die(std::string where, std::string message, Token &token) {
     std::cout << where << " " << message << std::endl;
     token.print();
@@ -34,6 +32,11 @@ Statements *Parser::statements() {
     Statements *stmts = new Statements();
     Token tok = tokenizer.getToken();
     while (tok.isName() || tok.isKeyword()) {
+        if (tok.getkeyword() == "for"){
+            Statement *stmt = forstatement();
+            stmts->addStatement(stmt);
+
+        }
         tokenizer.ungetToken();
         Statement *assignStmt = assignStatement();
         stmts->addStatement(assignStmt);
@@ -51,10 +54,12 @@ Statement *Parser::assignStatement() {
     Token varName = tokenizer.getToken();
     if (!varName.isName()) {
         // If the token is a keyword, parse a print statement instead
-        if (varName.isKeyword()) {
+        if (varName.isKeyword() && varName.getkeyword() == "print") {
             ExprNode *expr = print();
             return new PrintStatement(varName.getkeyword(), expr);
-        } else {
+        }
+
+        else {
             die("Parser::assignStatement", "Expected a name token or keyword, instead got", varName);
         }
     }
@@ -195,3 +200,68 @@ ExprNode *Parser::print() {
     ExprNode* p = primary();
     return p;
 }
+
+Statement* Parser::forstatement() {
+    Token tok = tokenizer.getToken();
+
+    if (tok.symbol() != '('){
+        die("Parser::forstatement", "Expected open-parenthesis, instead got", tok);
+    }
+
+    Statement* initStatement = assignStatement();
+
+    tok = tokenizer.getToken();
+
+    if (tok.symbol() != ';'){
+        die("Parser::forstatement", "Expected ; instead got", tok);
+    }
+
+    ExprNode* condition = rel_expr();
+
+    tok = tokenizer.getToken();
+    if (tok.symbol() != ';'){
+        die("Parser::forstatement", "Expected ; instead got", tok);
+    }
+
+    Statement* updateExpr = assignStatement();
+
+    tok = tokenizer.getToken();
+    if (tok.symbol() != ')'){
+        die("Parser::forstatement", "Expected close-parenthesis, instead got", tok);
+    }
+
+    tok = tokenizer.getToken();
+    if (tok.symbol() != '{'){
+        die("Parser::forstatement", "Expected {, instead got", tok);
+    }
+
+    //Statement* body = assignStatement();
+    Statements* body = new Statements();
+    tok = tokenizer.getToken();
+
+    while (tok.symbol() != '}') {
+        tokenizer.ungetToken();
+        Statement* stmt = assignStatement();
+        body->addStatement(stmt);
+        tok = tokenizer.getToken();
+    }
+
+
+
+    tok = tokenizer.getToken();
+
+    if (tok.symbol() != '}'){
+        die("Parser::forstatement", "Expected }, instead got", tok);
+    }
+
+    ForStatement* forStmt = new ForStatement(initStatement, condition, updateExpr, body);
+
+    return forStmt;
+}
+
+
+
+
+
+
+

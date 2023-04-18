@@ -122,7 +122,7 @@ Token Tokenizer::getToken() {
         token.symbol(c);
     }
 
-    else if( c == '(' || c == ')') {
+    else if( c == '(' || c == ')' || c == '{' || c == '}') {
         token.symbol(c);
     }
 
