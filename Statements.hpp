@@ -81,11 +81,12 @@ private:
     ExprNode* _rhsExpression;
 };
 
+
 class ForStatement : public Statement {
 public:
+    ForStatement() {}
     ForStatement(AssignmentStatement* initStmt, ExprNode* condExpr, AssignmentStatement* updateExpr, Statements* body) :
             _initStatement(initStmt), _conditionExpression(condExpr), _updateExpression(updateExpr), _body(body) {}
-
     AssignmentStatement*& initStatement() { return _initStatement; }
     ExprNode*& conditionExpression() { return _conditionExpression; }
     AssignmentStatement*& updateExpression() { return _updateExpression; }
@@ -117,6 +118,7 @@ private:
     AssignmentStatement* _updateExpression;
     Statements* _body;
 };
+
 
 
 
