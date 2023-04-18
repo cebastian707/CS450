@@ -35,7 +35,7 @@ Statements *Parser::statements() {
         if (tok.getkeyword() == "for"){
             Statement *stmt = forstatement();
             stmts->addStatement(stmt);
-
+            stmts->addStatement(stmt);
         }
         tokenizer.ungetToken();
         Statement *assignStmt = assignStatement();
@@ -245,12 +245,12 @@ Statement* Parser::forstatement() {
         body->addStatement(stmt);
         tok = tokenizer.getToken();
     }
-
-
-
     tok = tokenizer.getToken();
 
-    if (tok.symbol() != '}'){
+
+    //tok = tokenizer.getToken();
+
+    if (tok.symbol() != '}' && !tok.eof()){
         die("Parser::forstatement", "Expected }, instead got", tok);
     }
 
