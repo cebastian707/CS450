@@ -70,6 +70,7 @@ public:
     ExprNode*& rhsExpression() { return _rhsExpression; }
 
     virtual void print() {
+
     }
 
     virtual void evaluate(SymTab& symTab) {
@@ -101,13 +102,7 @@ public:
     Statements*& body() { return _body; }
 
     virtual void print() {
-        std::cout << "for (";
-        _initStatement->print();
-        std::cout << "; ";
-        _conditionExpression->print();
-        std::cout << "; ";
-        _updateExpression->print();
-        std::cout << ") {";
+        std::cout << "for ( "; _initStatement->print();std::cout << ";  "; _conditionExpression->print(); std::cout << "; ";_updateExpression->print(); std::cout << ") {";
         _body->print();
         std::cout << "}";
     }

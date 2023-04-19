@@ -35,7 +35,7 @@ Statements *Parser::statements() {
         if (tok.getkeyword() == "for"){
             Statement *stmt = forstatement();
             stmts->addStatement(stmt);
-            stmts->addStatement(stmt);
+            tok = tokenizer.getToken();
         }
         tokenizer.ungetToken();
         Statement *assignStmt = assignStatement();
@@ -52,7 +52,7 @@ Statement *Parser::assignStatement() {
     // <assign-stmtement> -> <id> = <expr>
 
     Token varName = tokenizer.getToken();
-    if (!varName.isName()) {
+    if (!varName.isName() && !varName.eof()) {
         // If the token is a keyword, parse a print statement instead
         if (varName.isKeyword() && varName.getkeyword() == "print") {
             ExprNode *expr = print();
@@ -66,7 +66,7 @@ Statement *Parser::assignStatement() {
 
     Token assignOp = tokenizer.getToken();
 
-    if (!assignOp.isAssignmentOperator()) {
+    if (!assignOp.isAssignmentOperator() && !varName.eof()) {
         die("Parser::assignStatement", "Expected an equal sign, instead got", assignOp);
     }
 
@@ -235,28 +235,42 @@ Statement* Parser::forstatement() {
         die("Parser::forstatement", "Expected {, instead got", tok);
     }
 
-    //Statement* body = assignStatement();
+
     Statements* body = new Statements();
     tok = tokenizer.getToken();
 
     while (tok.symbol() != '}') {
+        if (tok.getkeyword() == "for"){
+            Statement* st  = forstatement();
+            body->addStatement(st);
+
+            tok = tokenizer.getToken();
+            if (tok.symbol() =='}'){
+                break;
+            }
+        }
+
         tokenizer.ungetToken();
-        Statement* stmt = assignStatement();
+        Statement *stmt = assignStatement();
         body->addStatement(stmt);
+
+
         tok = tokenizer.getToken();
     }
-    tok = tokenizer.getToken();
 
-
-    //tok = tokenizer.getToken();
-
-    if (tok.symbol() != '}' && !tok.eof()){
+    if (tok.symbol() != '}'){
         die("Parser::forstatement", "Expected }, instead got", tok);
     }
+
 
     ForStatement* forStmt = new ForStatement(initStatement, condition, updateExpr, body);
 
     return forStmt;
+}
+
+Statement *Parser::print_quick(std::string keys) {
+    ExprNode *expr = print();
+    return new PrintStatement(keys, expr);
 }
 
 

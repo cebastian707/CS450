@@ -19,9 +19,9 @@
 class Parser {
 public:
     Parser(Tokenizer &tokenizer) : tokenizer{tokenizer} {}
-
     Statements *statements();
     Statement *assignStatement();
+    Statement *print_quick(std::string keys);
     ExprNode *print();
     Statement * forstatement();
     ExprNode *expr();
