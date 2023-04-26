@@ -2982,8 +2982,11 @@ CMakeFiles/APythonInterpreter.dir/main.cpp.o: ../main.cpp \
   /Library/Developer/CommandLineTools/SDKs/MacOSX12.3.sdk/usr/include/c++/v1/optional \
   /Library/Developer/CommandLineTools/SDKs/MacOSX12.3.sdk/usr/include/c++/v1/__tree \
   ../ExprNode.hpp \
-  ../Statements.hpp
+  ../Statements.hpp \
+  ../TypeDescriptor.hpp
 
+
+../TypeDescriptor.hpp:
 
 ../Token.cpp:
 

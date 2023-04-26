@@ -1,5 +1,5 @@
 CMakeFiles/APythonInterpreter.dir/Parser.cpp.o: \
-  /Users/cebastiansantiago/CLionProjects/CS450/Parser.cpp \
+  /Users/cebastiansantiago/CLionProjects/project3/Parser.cpp \
   /Library/Developer/CommandLineTools/SDKs/MacOSX12.3.sdk/usr/include/c++/v1/vector \
   /Library/Developer/CommandLineTools/SDKs/MacOSX12.3.sdk/usr/include/c++/v1/__config \
   /Library/Developer/CommandLineTools/SDKs/MacOSX12.3.sdk/usr/include/c++/v1/__config_site \
@@ -416,19 +416,19 @@ CMakeFiles/APythonInterpreter.dir/Parser.cpp.o: \
   /Library/Developer/CommandLineTools/SDKs/MacOSX12.3.sdk/usr/include/sys/_types/_fsfilcnt_t.h \
   /Library/Developer/CommandLineTools/SDKs/MacOSX12.3.sdk/usr/include/_types/_nl_item.h \
   /Library/Developer/CommandLineTools/SDKs/MacOSX12.3.sdk/usr/include/c++/v1/__bsd_locale_defaults.h \
-  /Users/cebastiansantiago/CLionProjects/CS450/Token.hpp \
-  /Users/cebastiansantiago/CLionProjects/CS450/Parser.hpp \
-  /Users/cebastiansantiago/CLionProjects/CS450/Tokenizer.hpp \
+  /Users/cebastiansantiago/CLionProjects/project3/Token.hpp \
+  /Users/cebastiansantiago/CLionProjects/project3/Parser.hpp \
+  /Users/cebastiansantiago/CLionProjects/project3/Tokenizer.hpp \
   /Library/Developer/CommandLineTools/SDKs/MacOSX12.3.sdk/usr/include/c++/v1/fstream \
   /Library/Developer/CommandLineTools/SDKs/MacOSX12.3.sdk/usr/include/c++/v1/filesystem \
   /Library/Developer/CommandLineTools/SDKs/MacOSX12.3.sdk/usr/include/c++/v1/stack \
   /Library/Developer/CommandLineTools/SDKs/MacOSX12.3.sdk/usr/include/c++/v1/deque \
   /Library/Developer/CommandLineTools/SDKs/MacOSX12.3.sdk/usr/include/c++/v1/iomanip \
-  /Users/cebastiansantiago/CLionProjects/CS450/SymTab.hpp \
+  /Users/cebastiansantiago/CLionProjects/project3/SymTab.hpp \
   /Library/Developer/CommandLineTools/SDKs/MacOSX12.3.sdk/usr/include/c++/v1/map \
   /Library/Developer/CommandLineTools/SDKs/MacOSX12.3.sdk/usr/include/c++/v1/__functional/is_transparent.h \
   /Library/Developer/CommandLineTools/SDKs/MacOSX12.3.sdk/usr/include/c++/v1/__node_handle \
   /Library/Developer/CommandLineTools/SDKs/MacOSX12.3.sdk/usr/include/c++/v1/optional \
   /Library/Developer/CommandLineTools/SDKs/MacOSX12.3.sdk/usr/include/c++/v1/__tree \
-  /Users/cebastiansantiago/CLionProjects/CS450/ExprNode.hpp \
-  /Users/cebastiansantiago/CLionProjects/CS450/Statements.hpp
+  /Users/cebastiansantiago/CLionProjects/project3/ExprNode.hpp \
+  /Users/cebastiansantiago/CLionProjects/project3/Statements.hpp

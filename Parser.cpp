@@ -36,6 +36,10 @@ Statements *Parser::statements() {
             Statement *stmt = forstatement();
             stmts->addStatement(stmt);
             tok = tokenizer.getToken();
+
+            if (tok.eof()){
+                break;
+            }
         }
         tokenizer.ungetToken();
         Statement *assignStmt = assignStatement();
@@ -56,6 +60,11 @@ Statement *Parser::assignStatement() {
         // If the token is a keyword, parse a print statement instead
         if (varName.isKeyword() && varName.getkeyword() == "print") {
             ExprNode *expr = print();
+            Token close = tokenizer.getToken();
+
+            if (close.symbol() != '\n'){
+                die("Parser::assignStatement", "Expected an end of line token", close);
+            }
             return new PrintStatement(varName.getkeyword(), expr);
         }
 
@@ -70,8 +79,13 @@ Statement *Parser::assignStatement() {
         die("Parser::assignStatement", "Expected an equal sign, instead got", assignOp);
     }
 
-    ExprNode *rightHandSideExpr = rel_term();
-    
+    ExprNode *rightHandSideExpr = rel_expr();
+
+    assignOp = tokenizer.getToken();
+
+    if (assignOp.symbol() != '\n'){
+        die("Parser::assignStatement", "Expected an end of line token", assignOp);
+    }
 
     return new AssignmentStatement(varName.getName(), rightHandSideExpr);
 
@@ -110,7 +124,7 @@ ExprNode *Parser::term() {
     ExprNode *left = primary();
     Token tok = tokenizer.getToken();
 
-    while ((tok.notEqualOperator() || tok.isEqualToOperator() || tok.isGreaterThanEqualOperator() || tok.isGreaterThanOperator()  || tok.isLessThanEqualOperator() || tok.isLessThanOperator()) || tok.isMultiplicationOperator() || tok.isDivisionOperator() || tok.isModuloOperator()) {
+    while (tok.notEqualOperator() || (tok.isEqualToOperator() || tok.isGreaterThanEqualOperator() || tok.isGreaterThanOperator()  || tok.isLessThanEqualOperator() || tok.isLessThanOperator()) || tok.isMultiplicationOperator() || tok.isDivisionOperator() || tok.isModuloOperator()) {
         InfixExprNode *p = new InfixExprNode(tok);
          p->left() = left;
         p->right() = primary();
@@ -144,29 +158,29 @@ ExprNode *Parser::primary() {
         return p;
     } else {
         tokenizer.ungetToken();
-        return rel_term();
+        return rel_expr();
     }
 }
 
-// ExprNode *Parser::rel_expr() {
-//     // This function parses the grammar rules:
+ExprNode *Parser::rel_expr() {
+    // This function parses the grammar rules:
 
-//     // <rel-expr> -> <rel-term> {(==, !=) <rel-term>}
-//     // <rel-term> -> <rel-primary> {(>, >=, <, <=) <rel-primary>}
-//     // <rel-primary> -> <arith-expr>
+    // <rel-expr> -> <rel-term> {(==, !=) <rel-term>}
+    // <rel-term> -> <rel-primary> {(>, >=, <, <=) <rel-primary>}
+    // <rel-primary> -> <arith-expr>
 
-//     ExprNode *left = rel_term();
-//     Token tok = tokenizer.getToken();
-//     while (tok.isEqualToOperator() || tok.notEqualOperator()) {
-//         InfixExprNode *p = new InfixExprNode(tok);
-//         p->left() = left;
-//         p->right() = rel_term();
-//         left = p;
-//         tok = tokenizer.getToken();
-//     }
-//     tokenizer.ungetToken();
-//     return left;
-// }
+    ExprNode *left = rel_term();
+    Token tok = tokenizer.getToken();
+    while (tok.isEqualToOperator() || tok.notEqualOperator()) {
+        InfixExprNode *p = new InfixExprNode(tok);
+        p->left() = left;
+        p->right() = rel_term();
+        left = p;
+        tok = tokenizer.getToken();
+    }
+    tokenizer.ungetToken();
+    return left;
+}
 
 ExprNode *Parser::rel_term() {
     // This function parses the grammar rules:
@@ -178,7 +192,7 @@ ExprNode *Parser::rel_term() {
     Token tok = tokenizer.getToken();
 
 
-    while (tok.isEqualToOperator() || tok.notEqualOperator() || tok.isGreaterThanEqualOperator() || tok.isGreaterThanOperator() || tok.isLessThanOperator() || tok.isLessThanEqualOperator()) {
+    while (tok.isGreaterThanEqualOperator() || tok.isGreaterThanOperator() || tok.isLessThanOperator() || tok.isLessThanEqualOperator()) {
         InfixExprNode *p = new InfixExprNode(tok);
         p->left() = left;
         p->right() = rel_primary();
@@ -217,12 +231,18 @@ Statement* Parser::forstatement() {
         die("Parser::forstatement", "Expected ; instead got", tok);
     }
 
-    ExprNode* condition = rel_term();
+    ExprNode* condition = rel_expr();
 
     tok = tokenizer.getToken();
     if (tok.symbol() != ';'){
         die("Parser::forstatement", "Expected ; instead got", tok);
     }
+
+    tok = tokenizer.getToken();
+    if (tok.symbol() != '\n'){
+        die("Parser::assignStatement", "Expected an end of line token", tok);
+    }
+
 
     // tok = tokenizer.getToken();
     // if (tok.symbol() != '\n'){
@@ -243,6 +263,12 @@ Statement* Parser::forstatement() {
     }
 
 
+    tok = tokenizer.getToken();
+    if (tok.symbol() != '\n'){
+        die("Parser::assignStatement", "Expected an end of line token", tok);
+    }
+
+
     Statements* body = new Statements();
     tok = tokenizer.getToken();
 
@@ -252,9 +278,19 @@ Statement* Parser::forstatement() {
             body->addStatement(st);
 
             tok = tokenizer.getToken();
+
+            if (tok.symbol() != '\n'){
+                die("Parser::assignStatement", "Expected an end of line token", tok);
+            }
+
+
+
+            tok = tokenizer.getToken();
             if (tok.symbol() =='}'){
                 break;
             }
+
+
         }
 
         tokenizer.ungetToken();
@@ -268,6 +304,8 @@ Statement* Parser::forstatement() {
     if (tok.symbol() != '}'){
         die("Parser::forstatement", "Expected }, instead got", tok);
     }
+
+
 
 
     ForStatement* forStmt = new ForStatement(initStatement, condition, updateExpr, body);

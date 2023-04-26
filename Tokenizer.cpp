@@ -49,13 +49,14 @@ Token Tokenizer::getToken() {
     }
 
     char c;
-    
+    /*
     while( inStream.get(c) && isspace(c) && c != '\n' )  // Skip spaces but not new-line chars.
         ;
-    
+    */
 
-    // while( inStream.get(c) && isspace(c) )  // Skip spaces including the new-line chars.
-    //     ;
+
+    while( inStream.get(c) && isspace(c) && c != '\n')  // Skip spaces including the new-line chars.
+        ;
 
     if(inStream.bad()) {
         std::cout << "Error while reading the input stream in Tokenizer.\n";
@@ -69,8 +70,8 @@ Token Tokenizer::getToken() {
     if( inStream.eof()) {
         token.eof() = true;
     } else if( c == '\n' ) {  // will not ever be the case unless new-line characters are not supressed.
-        
-        token.eol() = true;
+        //token.eol() = true;
+        token.symbol(c);
     } else if( isdigit(c) ) { // a integer?
         // put the digit back into the input stream so
         // we read the entire number in a function

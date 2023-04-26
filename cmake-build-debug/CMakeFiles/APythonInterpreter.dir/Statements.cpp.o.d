@@ -1,6 +1,6 @@
 CMakeFiles/APythonInterpreter.dir/Statements.cpp.o: \
-  /Users/cebastiansantiago/CLionProjects/CS450/Statements.cpp \
-  /Users/cebastiansantiago/CLionProjects/CS450/Statements.hpp \
+  /Users/cebastiansantiago/CLionProjects/project3/Statements.cpp \
+  /Users/cebastiansantiago/CLionProjects/project3/Statements.hpp \
   /Library/Developer/CommandLineTools/SDKs/MacOSX12.3.sdk/usr/include/c++/v1/iostream \
   /Library/Developer/CommandLineTools/SDKs/MacOSX12.3.sdk/usr/include/c++/v1/__config \
   /Library/Developer/CommandLineTools/SDKs/MacOSX12.3.sdk/usr/include/c++/v1/__config_site \
@@ -417,9 +417,9 @@ CMakeFiles/APythonInterpreter.dir/Statements.cpp.o: \
   /Library/Developer/CommandLineTools/SDKs/MacOSX12.3.sdk/usr/include/c++/v1/__bsd_locale_defaults.h \
   /Library/Developer/CommandLineTools/SDKs/MacOSX12.3.sdk/usr/include/c++/v1/vector \
   /Library/Developer/CommandLineTools/SDKs/MacOSX12.3.sdk/usr/include/c++/v1/__split_buffer \
-  /Users/cebastiansantiago/CLionProjects/CS450/ExprNode.hpp \
-  /Users/cebastiansantiago/CLionProjects/CS450/Token.hpp \
-  /Users/cebastiansantiago/CLionProjects/CS450/SymTab.hpp \
+  /Users/cebastiansantiago/CLionProjects/project3/ExprNode.hpp \
+  /Users/cebastiansantiago/CLionProjects/project3/Token.hpp \
+  /Users/cebastiansantiago/CLionProjects/project3/SymTab.hpp \
   /Library/Developer/CommandLineTools/SDKs/MacOSX12.3.sdk/usr/include/c++/v1/map \
   /Library/Developer/CommandLineTools/SDKs/MacOSX12.3.sdk/usr/include/c++/v1/__functional/is_transparent.h \
   /Library/Developer/CommandLineTools/SDKs/MacOSX12.3.sdk/usr/include/c++/v1/__node_handle \
