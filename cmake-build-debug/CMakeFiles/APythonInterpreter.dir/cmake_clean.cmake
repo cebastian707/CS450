@@ -13,6 +13,8 @@ file(REMOVE_RECURSE
   "CMakeFiles/APythonInterpreter.dir/Token.cpp.o.d"
   "CMakeFiles/APythonInterpreter.dir/Tokenizer.cpp.o"
   "CMakeFiles/APythonInterpreter.dir/Tokenizer.cpp.o.d"
+  "CMakeFiles/APythonInterpreter.dir/TypeDescriptor.cpp.o"
+  "CMakeFiles/APythonInterpreter.dir/TypeDescriptor.cpp.o.d"
   "CMakeFiles/APythonInterpreter.dir/main.cpp.o"
   "CMakeFiles/APythonInterpreter.dir/main.cpp.o.d"
 )

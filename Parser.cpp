@@ -223,9 +223,20 @@ Statement* Parser::forstatement() {
         die("Parser::forstatement", "Expected open-parenthesis, instead got", tok);
     }
 
+    tok = tokenizer.getToken();
+    if (tok.symbol() != '\n'){
+        die("Parser::assignStatement", "Expected an end of line token", tok);
+    }
+
+
+
     Statement* initStatement = assignStatement();
 
+
+
+
     tok = tokenizer.getToken();
+
 
     if (tok.symbol() != ';'){
         die("Parser::forstatement", "Expected ; instead got", tok);
@@ -233,14 +244,20 @@ Statement* Parser::forstatement() {
 
     ExprNode* condition = rel_expr();
 
-    tok = tokenizer.getToken();
-    if (tok.symbol() != ';'){
-        die("Parser::forstatement", "Expected ; instead got", tok);
-    }
 
     tok = tokenizer.getToken();
+
+
+
     if (tok.symbol() != '\n'){
         die("Parser::assignStatement", "Expected an end of line token", tok);
+    }
+
+
+    tok = tokenizer.getToken();
+
+    if (tok.symbol() != ';'){
+        die("Parser::forstatement", "Expected ; instead got", tok);
     }
 
 

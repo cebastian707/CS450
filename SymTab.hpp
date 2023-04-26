@@ -5,6 +5,7 @@
 #ifndef APYTHONINTERPRETER_SYMTAB_HPP
 #define APYTHONINTERPRETER_SYMTAB_HPP
 
+#include "TypeDescriptor.hpp"
 #include <string>
 #include <map>
 
@@ -16,11 +17,12 @@ class SymTab {
 public:
     void setValueFor(const std::string &vName, int value);
     bool isDefined(const std::string &vName);
-    int getValueFor(const std::string &vName);
+    TypeDescriptor * getValueFor(const std::string &vName);
     void print();
 
 private:
-    std::map<std::string, int> symTab;
+    std::map<std::string,  TypeDescriptor *> symTab;
+    //std::map<std::string, int> symTab;
     bool debug = false;
 };
 

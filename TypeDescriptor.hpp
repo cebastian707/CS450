@@ -35,7 +35,7 @@ struct StringDescriptor: public TypeDescriptor {
 };
 
 
-void printValue(TypeDescriptor *desc);
+//void printValue(TypeDescriptor *desc);
 
 
 #endif //APYTHONINTERPRETER_TYPEDESCRIPTOR_HPP

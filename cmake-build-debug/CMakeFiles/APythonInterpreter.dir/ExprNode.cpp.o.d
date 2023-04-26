@@ -417,6 +417,7 @@ CMakeFiles/APythonInterpreter.dir/ExprNode.cpp.o: \
   /Users/cebastiansantiago/CLionProjects/project3/ExprNode.hpp \
   /Users/cebastiansantiago/CLionProjects/project3/Token.hpp \
   /Users/cebastiansantiago/CLionProjects/project3/SymTab.hpp \
+  /Users/cebastiansantiago/CLionProjects/project3/TypeDescriptor.hpp \
   /Library/Developer/CommandLineTools/SDKs/MacOSX12.3.sdk/usr/include/c++/v1/map \
   /Library/Developer/CommandLineTools/SDKs/MacOSX12.3.sdk/usr/include/c++/v1/__functional/is_transparent.h \
   /Library/Developer/CommandLineTools/SDKs/MacOSX12.3.sdk/usr/include/c++/v1/__node_handle \

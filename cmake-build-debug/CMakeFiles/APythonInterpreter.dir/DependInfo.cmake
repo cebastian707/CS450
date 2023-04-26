@@ -14,6 +14,7 @@ set(CMAKE_DEPENDS_DEPENDENCY_FILES
   "/Users/cebastiansantiago/CLionProjects/project3/SymTab.cpp" "CMakeFiles/APythonInterpreter.dir/SymTab.cpp.o" "gcc" "CMakeFiles/APythonInterpreter.dir/SymTab.cpp.o.d"
   "/Users/cebastiansantiago/CLionProjects/project3/Token.cpp" "CMakeFiles/APythonInterpreter.dir/Token.cpp.o" "gcc" "CMakeFiles/APythonInterpreter.dir/Token.cpp.o.d"
   "/Users/cebastiansantiago/CLionProjects/project3/Tokenizer.cpp" "CMakeFiles/APythonInterpreter.dir/Tokenizer.cpp.o" "gcc" "CMakeFiles/APythonInterpreter.dir/Tokenizer.cpp.o.d"
+  "/Users/cebastiansantiago/CLionProjects/project3/TypeDescriptor.cpp" "CMakeFiles/APythonInterpreter.dir/TypeDescriptor.cpp.o" "gcc" "CMakeFiles/APythonInterpreter.dir/TypeDescriptor.cpp.o.d"
   "/Users/cebastiansantiago/CLionProjects/project3/main.cpp" "CMakeFiles/APythonInterpreter.dir/main.cpp.o" "gcc" "CMakeFiles/APythonInterpreter.dir/main.cpp.o.d"
   )
 

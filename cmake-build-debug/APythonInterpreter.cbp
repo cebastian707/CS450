@@ -116,6 +116,12 @@
 		<Unit filename="/Users/cebastiansantiago/CLionProjects/project3/Tokenizer.hpp">
 			<Option target="APythonInterpreter"/>
 		</Unit>
+		<Unit filename="/Users/cebastiansantiago/CLionProjects/project3/TypeDescriptor.cpp">
+			<Option target="APythonInterpreter"/>
+		</Unit>
+		<Unit filename="/Users/cebastiansantiago/CLionProjects/project3/TypeDescriptor.hpp">
+			<Option target="APythonInterpreter"/>
+		</Unit>
 		<Unit filename="/Users/cebastiansantiago/CLionProjects/project3/main.cpp">
 			<Option target="APythonInterpreter"/>
 		</Unit>

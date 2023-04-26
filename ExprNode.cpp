@@ -84,12 +84,22 @@ void Variable::print() {
 }
 
 int Variable::evaluate(SymTab &symTab) {
-    if( ! symTab.isDefined(token().getName())) {
+    if (!symTab.isDefined(token().getName())) {
         std::cout << "Use of undefined variable, " << token().getName() << std::endl;
         exit(1);
     }
-    if(debug)
-        std::cout << "Variable::evaluate: returning " << symTab.getValueFor(token().getName()) << std::endl;
-    return symTab.getValueFor(token().getName());
+
+    TypeDescriptor* desc = symTab.getValueFor(token().getName());
+
+    if (desc->type() != TypeDescriptor::INTEGER) {
+        std::cout << "Variable::evaluate: Type mismatch, expected INTEGER" << std::endl;
+        exit(1);
+    }
+
+    if (debug)
+        std::cout << "Variable::evaluate: returning " << dynamic_cast<NumberDescriptor*>(desc)->value.intValue << std::endl;
+
+    return dynamic_cast<NumberDescriptor*>(desc)->value.intValue;
 }
+
 
