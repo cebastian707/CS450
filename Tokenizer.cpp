@@ -152,6 +152,6 @@ void Tokenizer::ungetToken() {
 void Tokenizer::printProcessedTokens() {
     for(auto iter = _tokens.begin(); iter != _tokens.end(); ++iter) {
         iter->print();
-        std::cout << std::endl;
+        //std::cout << std::endl;
     }
 }

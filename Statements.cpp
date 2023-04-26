@@ -16,6 +16,7 @@ void Statements::addStatement(Statement *statement) { _statements.push_back(stat
 void Statements::print() {
     for (auto s: _statements)
         s->print();
+        std::cout<<std::endl;
 }
 
 void Statements::evaluate(SymTab &symTab) {

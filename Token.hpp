@@ -28,7 +28,7 @@ public:
     void relationalSymbol(std::string str) {_relationalSymbol = str;}
     std::string relationalSymbol() {return _relationalSymbol;}
 
-
+    bool isNewLineChar() const {return _symbol == '\n'; }
     bool isSemiColon() const { return _symbol == ';'; }
     bool isAssignmentOperator() const              { return _symbol == '='; }
     bool isMultiplicationOperator() const { return _symbol == '*'; }
