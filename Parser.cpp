@@ -81,12 +81,12 @@ Statement *Parser::assignStatement() {
 
     ExprNode *rightHandSideExpr = rel_expr();
 
-    assignOp = tokenizer.getToken();
-
+    //assignOp = tokenizer.getToken();
+    /*
     if (assignOp.symbol() != '\n'){
         die("Parser::assignStatement", "Expected an end of line token", assignOp);
     }
-
+    */
     return new AssignmentStatement(varName.getName(), rightHandSideExpr);
 
 }
@@ -223,11 +223,12 @@ Statement* Parser::forstatement() {
         die("Parser::forstatement", "Expected open-parenthesis, instead got", tok);
     }
 
+    /*
     tok = tokenizer.getToken();
     if (tok.symbol() != '\n'){
         die("Parser::assignStatement", "Expected an end of line token", tok);
     }
-
+    */
 
 
     Statement* initStatement = assignStatement();
@@ -245,14 +246,12 @@ Statement* Parser::forstatement() {
     ExprNode* condition = rel_expr();
 
 
+    /*
     tok = tokenizer.getToken();
-
-
-
     if (tok.symbol() != '\n'){
         die("Parser::assignStatement", "Expected an end of line token", tok);
     }
-
+    */
 
     tok = tokenizer.getToken();
 
@@ -314,6 +313,17 @@ Statement* Parser::forstatement() {
         Statement *stmt = assignStatement();
         body->addStatement(stmt);
 
+
+        tok = tokenizer.getToken();
+
+        if (tok.symbol() =='}'){
+            break;
+        }
+
+
+        if (tok.symbol() != '\n'){
+            die("Parser::assignStatement", "Expected an end of line token", tok);
+        }
 
         tok = tokenizer.getToken();
     }

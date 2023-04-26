@@ -5,12 +5,18 @@
 #include <iostream>
 #include "SymTab.hpp"
 
-void SymTab::setValueFor(const std::string &vName, int value) {
+void SymTab::setValueFor(const std::string& vName, int value) {
     // Define a variable by setting its initial value.
-    if(debug)
+    if (debug) {
         std::cout << vName << " -> " << value << std::endl;
-    symTab[vName] = reinterpret_cast<TypeDescriptor *>(value);
+    }
+
+    NumberDescriptor* desc = new NumberDescriptor(TypeDescriptor::INTEGER);
+    desc->value.intValue = value;
+    symTab[vName] = desc;
 }
+
+
 
 bool SymTab::isDefined(const std::string &vName) {
     return symTab.find(vName) != symTab.end();

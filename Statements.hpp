@@ -74,7 +74,7 @@ public:
     }
 
     virtual void evaluate(SymTab& symTab) {
-        std::cout << "std::cout << " << _rhsExpression->evaluate(symTab) << " <<std::endl;" << std::endl;
+        std::cout << _rhsExpression->evaluate(symTab)  << std::endl;
     }
 
 private:

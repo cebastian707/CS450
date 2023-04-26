@@ -1,15 +1,7 @@
-for(
-   i = 2
-   ; i < 20
-   ; i = i + 1
-   ) {
+for(i = 2; i < 20; i = i + 1) {
      sum = 0
-     for(
-          j = 1
-	  ; j <= i
-	  ; j = j + 1
-	  ) {
+     for(j = 1; j <= i; j = j + 1) {
          sum = sum + j
      }
-    print sum
+     print sum
 }

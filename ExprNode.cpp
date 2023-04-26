@@ -91,6 +91,11 @@ int Variable::evaluate(SymTab &symTab) {
 
     TypeDescriptor* desc = symTab.getValueFor(token().getName());
 
+
+    if (desc == nullptr) {
+        std::cout << "Variable::evaluate: Value for variable " << token().getName() << " is null" << std::endl;
+        exit(1);
+    }
     if (desc->type() != TypeDescriptor::INTEGER) {
         std::cout << "Variable::evaluate: Type mismatch, expected INTEGER" << std::endl;
         exit(1);
