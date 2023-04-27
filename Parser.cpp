@@ -31,7 +31,12 @@ Statements *Parser::statements() {
 
     Statements *stmts = new Statements();
     Token tok = tokenizer.getToken();
-    while (tok.isName() || tok.isKeyword()) {
+    while (tok.isName() || tok.isKeyword() || tok.isNewLineChar()) {
+        if (tok.isNewLineChar()){
+             tok = tokenizer.getToken();
+            std::cout << "Skipping newline char"<<std::endl;
+            continue;
+        }
         if (tok.getkeyword() == "for"){
             Statement *stmt = forstatement();
             stmts->addStatement(stmt);
@@ -40,10 +45,15 @@ Statements *Parser::statements() {
             if (tok.eof()){
                 break;
             }
+        }else if(tok.getkeyword() == "print"){
+
+        }else if(tok.isName()){
+             tokenizer.ungetToken();
+            Statement *assignStmt = assignStatement();
+            stmts->addStatement(assignStmt);           
+
         }
-        tokenizer.ungetToken();
-        Statement *assignStmt = assignStatement();
-        stmts->addStatement(assignStmt);
+       
         tok = tokenizer.getToken();
         while (tok.symbol() == '\n'){
             tok = tokenizer.getToken();
@@ -218,38 +228,23 @@ ExprNode *Parser::print() {
 }
 
 Statement* Parser::forstatement() {
+    std::cout << "About to parse for loop"<<std::endl;
     Token tok = tokenizer.getToken();
 
     if (tok.symbol() != '('){
         die("Parser::forstatement", "Expected open-parenthesis, instead got", tok);
     }
-
-
     Statement* initStatement = assignStatement();
-
-
-
-
     tok = tokenizer.getToken();
-
-
     if (tok.symbol() != ';'){
         die("Parser::forstatement", "Expected ; instead got", tok);
     }
 
     ExprNode* condition = rel_expr();
-
-
-
     tok = tokenizer.getToken();
-
     if (tok.symbol() != ';'){
         die("Parser::forstatement", "Expected ; instead got", tok);
     }
-
-
-
-
     Statement* updateExpr = assignStatement();
 
     tok = tokenizer.getToken();
@@ -269,48 +264,49 @@ Statement* Parser::forstatement() {
     }
 
 
-    Statements* body = new Statements();
+    Statements* body = statements();
+
     tok = tokenizer.getToken();
 
-    while (tok.symbol() != '}') {
-        if (tok.getkeyword() == "for"){
-            Statement* st  = forstatement();
-            body->addStatement(st);
+    // while (tok.symbol() != '}') {
+    //     if (tok.getkeyword() == "for"){
+    //         Statement* st  = forstatement();
+    //         body->addStatement(st);
 
-            tok = tokenizer.getToken();
+    //         tok = tokenizer.getToken();
 
-            if (tok.symbol() != '\n'){
-                die("Parser::assignStatement", "Expected an end of line token", tok);
-            }
-
-
-
-            tok = tokenizer.getToken();
-            if (tok.symbol() =='}'){
-                break;
-            }
+    //         if (tok.symbol() != '\n'){
+    //             die("Parser::assignStatement", "Expected an end of line token", tok);
+    //         }
 
 
-        }
 
-        tokenizer.ungetToken();
-        Statement *stmt = assignStatement();
-        body->addStatement(stmt);
-
-
-        tok = tokenizer.getToken();
-
-        if (tok.symbol() =='}'){
-            break;
-        }
+    //         tok = tokenizer.getToken();
+    //         if (tok.symbol() =='}'){
+    //             break;
+    //         }
 
 
-        if (tok.symbol() != '\n'){
-            die("Parser::assignStatement", "Expected an end of line token", tok);
-        }
+    //     }
 
-        tok = tokenizer.getToken();
-    }
+    //     tokenizer.ungetToken();
+    //     Statement *stmt = assignStatement();
+    //     body->addStatement(stmt);
+
+
+    //     tok = tokenizer.getToken();
+
+    //     if (tok.symbol() =='}'){
+    //         break;
+    //     }
+
+
+    //     if (tok.symbol() != '\n'){
+    //         die("Parser::assignStatement", "Expected an end of line token", tok);
+    //     }
+
+    //     tok = tokenizer.getToken();
+    // }
 
     if (tok.symbol() != '}'){
         die("Parser::forstatement", "Expected }, instead got", tok);

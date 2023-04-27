@@ -12,6 +12,8 @@ void Token::print() const {
     else if( eof() )                    std::cout << "EOF" ;
     else if( isOpenParen() )  std::cout << "(" ;
     else if( isCloseParen() )  std::cout << ")" ;
+    else if ( isOpenCurly() ) std::cout << "{";
+    else if ( isCloseCurly() ) std::cout << "}";
     else if( isAssignmentOperator() )  std::cout << " = " ;
     else if( isSemiColon() )  std::cout << ";" ;
     else if( isMultiplicationOperator() )  std::cout << " * " ;

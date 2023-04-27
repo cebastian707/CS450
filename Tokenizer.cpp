@@ -51,13 +51,23 @@ Token Tokenizer::getToken() {
     char c;
 
 
-    while( inStream.get(c) && (isspace(c) || c == '#') && c != '\n'){  // Skip spaces including the new-line chars.
+    while( inStream.get(c) && c != '\n' && (isspace(c) || c == '#')){  // Skip spaces including the new-line chars.
         if (c == '#'){
             while (inStream.get(c) && c!= '\n')
                 ;
+                inStream.putback(c);
          
         }
     }
+
+        // while( inStream.get(c) && c != '\n' && (isspace(c) || c == '#')){  // Skip spaces including the new-line chars.
+    //     if (c == '#'){
+    //         while (inStream.get(c) && c!= '\n')
+    //             ;
+    //             inStream.putback(c);
+         
+    //     }
+    // }
 
     if(inStream.bad()) {
         std::cout << "Error while reading the input stream in Tokenizer.\n";
@@ -80,10 +90,20 @@ Token Tokenizer::getToken() {
         inStream.putback(c);
         token.setWholeNumber( readInteger() );
 
-    }else if (c == '#') {
-        while (inStream.get(c) && c != '\n');
-        return getToken();
-    }else if( c == '=' ) {
+    }
+    // else if (c == '#') {
+    //     std::cout<<"c is passed #"<<std::endl;
+    //     while (inStream.get(c) && c != '\n');
+    //     inStream.putback(c);
+    //     std::cout << "Processing comment: "<<c<<std::endl;
+    //     token = getToken();
+    //     token.print();
+    //     _tokens.push_back(token);
+    //     return lastToken = token;
+    //    // return getToken();
+    // }
+    else if( c == '=' ) {
+
         char d = inStream.peek();
         if (d == '=') {
             inStream.get(d);
@@ -151,6 +171,7 @@ Token Tokenizer::getToken() {
     }
 
     else if( c == '(' || c == ')' || c == '{' || c == '}') {
+       // std::cout<<"Curly brace check??: "<< c <<std::endl;
         token.symbol(c);
     }
 
@@ -168,6 +189,7 @@ Token Tokenizer::getToken() {
         std::cout << "Unknown character in input. ->" << c << "<-" << std::endl;
         exit(1);
     }
+   // token.print();
     _tokens.push_back(token);
     return lastToken = token;
 }
