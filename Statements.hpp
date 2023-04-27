@@ -70,11 +70,11 @@ public:
     ExprNode*& rhsExpression() { return _rhsExpression; }
 
     virtual void print() {
-
+        std::cout << "PRINT " << _lhsVariable << std::endl;
     }
 
     virtual void evaluate(SymTab& symTab) {
-        std::cout << _rhsExpression->evaluate(symTab)  << std::endl;
+        _rhsExpression->evaluate(symTab);
     }
 
 private:
@@ -109,11 +109,27 @@ public:
 
     virtual void evaluate(SymTab& symTab) {
         _initStatement->evaluate(symTab);
-        while (_conditionExpression->evaluate(symTab) != 0) {
+
+        // Ensure the condition expression returns an integer value
+        TypeDescriptor* conditionResult = _conditionExpression->evaluate(symTab);
+        if (conditionResult->type() != TypeDescriptor::INTEGER) {
+            std::cout << "WhileStatement::evaluate: Type mismatch, expected INTEGER" << std::endl;
+            exit(1);
+        }
+
+        while (dynamic_cast<NumberDescriptor*>(conditionResult)->value.intValue != 0) {
             _body->evaluate(symTab);
             _updateExpression->evaluate(symTab);
+
+            // Re-evaluate the condition expression to check if the loop should continue
+            conditionResult = _conditionExpression->evaluate(symTab);
+            if (conditionResult->type() != TypeDescriptor::INTEGER) {
+                std::cout << "WhileStatement::evaluate: Type mismatch, expected INTEGER" << std::endl;
+                exit(1);
+            }
         }
     }
+
 
 private:
     AssignmentStatement* _initStatement;

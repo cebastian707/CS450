@@ -7,9 +7,7 @@
 
 
 struct TypeDescriptor {
-
-
-    enum types {INTEGER, DOUBLE, BOOL};
+    enum types {INTEGER, DOUBLE, BOOL,STRING};
     TypeDescriptor(types type): _type{type} {}
     types &type() { return _type; }
     virtual ~TypeDescriptor() {}

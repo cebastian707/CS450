@@ -15,7 +15,7 @@
 
 class SymTab {
 public:
-    void setValueFor(const std::string &vName, int value);
+    void setValueFor(const std::string &vName, TypeDescriptor *desc);
     bool isDefined(const std::string &vName);
     TypeDescriptor * getValueFor(const std::string &vName);
     void print();

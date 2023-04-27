@@ -5,18 +5,17 @@
 #include <iostream>
 #include "SymTab.hpp"
 
-void SymTab::setValueFor(const std::string& vName, int value) {
-    // Define a variable by setting its initial value.
+void SymTab::setValueFor(const std::string& vName, TypeDescriptor* desc) {
     if (debug) {
-        std::cout << vName << " -> " << value << std::endl;
     }
-
-    NumberDescriptor* desc = new NumberDescriptor(TypeDescriptor::INTEGER);
-    desc->value.intValue = value;
+    std::cout << vName << " -> ";
+    if (desc->type() == TypeDescriptor::INTEGER) {
+        std::cout << dynamic_cast<NumberDescriptor*>(desc)->value.intValue << std::endl;
+    } else if (desc->type() == TypeDescriptor::STRING) {
+        std::cout << dynamic_cast<StringDescriptor*>(desc)->str << std::endl;
+    }
     symTab[vName] = desc;
 }
-
-
 
 bool SymTab::isDefined(const std::string &vName) {
     return symTab.find(vName) != symTab.end();
@@ -35,9 +34,10 @@ TypeDescriptor* SymTab::getValueFor(const std::string& vName) {
     return symTab.find(vName)->second;
 }
 
-
 void printValue(TypeDescriptor* desc) {
     switch (desc->type()) {
+        case TypeDescriptor::STRING:std::cout << dynamic_cast<StringDescriptor*>(desc)->str;
+            break;
         case TypeDescriptor::INTEGER:
             std::cout << dynamic_cast<NumberDescriptor*>(desc)->value.intValue;
             break;

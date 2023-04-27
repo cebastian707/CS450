@@ -11,6 +11,10 @@ ExprNode::ExprNode(Token token): _token{token} {}
 
 Token ExprNode::token() { return _token; }
 
+TypeDescriptor *ExprNode::evaluate(SymTab &symTab) {
+    return nullptr;
+}
+
 // InfixExprNode functions
 InfixExprNode::InfixExprNode(Token tk) : ExprNode{tk}, _left(nullptr), _right(nullptr) {}
 
@@ -18,42 +22,46 @@ ExprNode *&InfixExprNode::left() { return _left; }
 
 ExprNode *&InfixExprNode::right() { return _right; }
 
-int InfixExprNode::evaluate(SymTab &symTab) {
+TypeDescriptor* InfixExprNode::evaluate(SymTab &symTab) {
     // Evaluates an infix expression using a post-order traversal of the expression tree.
-    int lValue = left()->evaluate(symTab);
-    int rValue = right()->evaluate(symTab);
-    if(debug)
-        std::cout << "InfixExprNode::evaluate: " << lValue << " " <<
-            token().symbol() << " " << rValue << std::endl;
-    if( token().isAdditionOperator() )
-        return lValue + rValue;
-    else if(token().isSubtractionOperator())
-        return lValue - rValue;
-    else if(token().isMultiplicationOperator())
-        return lValue * rValue;
-    else if(token().isDivisionOperator())
-        return lValue / rValue; // division by zero?
-    else if( token().isModuloOperator() )
-        return lValue % rValue;
-    else if(token().isLessThanOperator())
-        return lValue < rValue;
-    else if (token().isLessThanEqualOperator())
-        return lValue <= rValue;
-    else if(token().isGreaterThanOperator())
-        return lValue > rValue;
-    else if (token().isGreaterThanEqualOperator())
-        return lValue >= rValue;
-    else if (token().isEqualToOperator())
-        return lValue == rValue;
-    else if(token().notEqualOperator())
-        return lValue != rValue;
-
+    TypeDescriptor* leftValue = left()->evaluate(symTab);
+    TypeDescriptor* rightValue = right()->evaluate(symTab);
+    int result = 0;
+   // if(debug)
+        //std::cout << "InfixExprNode::evaluate: " << lValue << " " <<
+            //token().symbol() << " " << rValue << std::endl;
+    if( token().isAdditionOperator() ) {
+        result = dynamic_cast<NumberDescriptor *>(leftValue)->value.intValue + dynamic_cast<NumberDescriptor *>(rightValue)->value.intValue;
+    }else if(token().isSubtractionOperator()) {
+        result = dynamic_cast<NumberDescriptor *>(leftValue)->value.intValue - dynamic_cast<NumberDescriptor *>(rightValue)->value.intValue;
+    }else if(token().isMultiplicationOperator()) {
+        result = dynamic_cast<NumberDescriptor *>(leftValue)->value.intValue * dynamic_cast<NumberDescriptor *>(rightValue)->value.intValue;
+    }else if(token().isDivisionOperator()) {
+        result = dynamic_cast<NumberDescriptor *>(leftValue)->value.intValue / dynamic_cast<NumberDescriptor *>(rightValue)->value.intValue;
+    }else if( token().isModuloOperator() ) {
+        result = dynamic_cast<NumberDescriptor *>(leftValue)->value.intValue % dynamic_cast<NumberDescriptor *>(rightValue)->value.intValue;
+    }else if(token().isLessThanOperator()) {
+        result = dynamic_cast<NumberDescriptor *>(leftValue)->value.intValue < dynamic_cast<NumberDescriptor *>(rightValue)->value.intValue;
+    }else if (token().isLessThanEqualOperator()) {
+        result = dynamic_cast<NumberDescriptor *>(leftValue)->value.intValue <= dynamic_cast<NumberDescriptor *>(rightValue)->value.intValue;
+    }else if(token().isGreaterThanOperator()) {
+        result = dynamic_cast<NumberDescriptor *>(leftValue)->value.intValue > dynamic_cast<NumberDescriptor *>(rightValue)->value.intValue;
+    }else if (token().isGreaterThanEqualOperator()) {
+        result = dynamic_cast<NumberDescriptor *>(leftValue)->value.intValue >= dynamic_cast<NumberDescriptor *>(rightValue)->value.intValue;
+    }else if (token().isEqualToOperator()) {
+        result = dynamic_cast<NumberDescriptor *>(leftValue)->value.intValue == dynamic_cast<NumberDescriptor *>(rightValue)->value.intValue;
+    }else if(token().notEqualOperator()) {
+        result = dynamic_cast<NumberDescriptor *>(leftValue)->value.intValue != dynamic_cast<NumberDescriptor *>(rightValue)->value.intValue;
+    }
     else {
         std::cout << "InfixExprNode::evaluate: don't know how to evaluate this operator\n";
         token().print();
         std::cout << std::endl;
         exit(2);
     }
+    TypeDescriptor* desc = new NumberDescriptor(TypeDescriptor::INTEGER);
+    dynamic_cast<NumberDescriptor*>(desc)->value.intValue = result;
+    return desc;
 }
 
 void InfixExprNode::print() {
@@ -69,11 +77,25 @@ void WholeNumber::print() {
     token().print();
 }
 
-int WholeNumber::evaluate(SymTab &symTab) {
-    if(debug)
-        std::cout << "WholeNumber::evaluate: returning " << token().getWholeNumber() << std::endl;
-    return token().getWholeNumber();
+
+TypeDescriptor* StringLiteral::evaluate(SymTab& symTab) {
+    std::string strValue = this->token().getstring();
+    TypeDescriptor* desc = new StringDescriptor(TypeDescriptor::STRING);
+    dynamic_cast<StringDescriptor*>(desc)->str = strValue;
+    //symTab.setValueFor(token().getName(), desc);
+    return desc;
 }
+
+TypeDescriptor* WholeNumber::evaluate(SymTab &symTab) {
+    int intValue = token().getWholeNumber();
+    if (debug)
+        std::cout << "WholeNumber::evaluate: returning " << intValue << std::endl;
+    TypeDescriptor* desc = new NumberDescriptor(TypeDescriptor::INTEGER);
+    dynamic_cast<NumberDescriptor*>(desc)->value.intValue = intValue;
+    //symTab.setValueFor(token().getName(), desc);
+    return desc;
+}
+
 
 // Variable
 
@@ -83,7 +105,8 @@ void Variable::print() {
     token().print();
 }
 
-int Variable::evaluate(SymTab &symTab) {
+
+TypeDescriptor* Variable::evaluate(SymTab &symTab) {
     if (!symTab.isDefined(token().getName())) {
         std::cout << "Use of undefined variable, " << token().getName() << std::endl;
         exit(1);
@@ -91,20 +114,28 @@ int Variable::evaluate(SymTab &symTab) {
 
     TypeDescriptor* desc = symTab.getValueFor(token().getName());
 
-
     if (desc == nullptr) {
         std::cout << "Variable::evaluate: Value for variable " << token().getName() << " is null" << std::endl;
         exit(1);
     }
-    if (desc->type() != TypeDescriptor::INTEGER) {
-        std::cout << "Variable::evaluate: Type mismatch, expected INTEGER" << std::endl;
-        exit(1);
+    if (desc->type() == TypeDescriptor::INTEGER) {
+        std::cout << dynamic_cast<NumberDescriptor*>(desc)->value.intValue << std::endl;
+    } else if (desc->type() == TypeDescriptor::STRING) {
+        std::cout << dynamic_cast<StringDescriptor*>(desc)->str << std::endl;
     }
 
-    if (debug)
-        std::cout << "Variable::evaluate: returning " << dynamic_cast<NumberDescriptor*>(desc)->value.intValue << std::endl;
-
-    return dynamic_cast<NumberDescriptor*>(desc)->value.intValue;
+    return desc;
 }
+
+
+StringLiteral::StringLiteral(Token token) : ExprNode(token) {
+
+}
+
+void StringLiteral::print() {
+    token().print();
+}
+
+
 
 

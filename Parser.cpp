@@ -45,6 +45,10 @@ Statements *Parser::statements() {
         Statement *assignStmt = assignStatement();
         stmts->addStatement(assignStmt);
         tok = tokenizer.getToken();
+        while (tok.symbol() == '\n'){
+            tok = tokenizer.getToken();
+        }
+
     }
     tokenizer.ungetToken();
     return stmts;
@@ -81,14 +85,8 @@ Statement *Parser::assignStatement() {
 
     ExprNode *rightHandSideExpr = rel_expr();
 
-    //assignOp = tokenizer.getToken();
-    /*
-    if (assignOp.symbol() != '\n'){
-        die("Parser::assignStatement", "Expected an end of line token", assignOp);
-    }
-    */
-    return new AssignmentStatement(varName.getName(), rightHandSideExpr);
 
+    return new AssignmentStatement(varName.getName(), rightHandSideExpr);
 }
 
 ExprNode *Parser::expr() {
@@ -150,7 +148,11 @@ ExprNode *Parser::primary() {
         return new WholeNumber(tok);
     } else if (tok.isName()) {
         return new Variable(tok);
-    } else if (tok.isOpenParen()) {
+    } else if (tok.strings()){
+        return new StringLiteral(tok);
+    }
+
+     else if (tok.isOpenParen()) {
         ExprNode *p = expr();
         Token token = tokenizer.getToken();
         if (!token.isCloseParen())
@@ -223,13 +225,6 @@ Statement* Parser::forstatement() {
         die("Parser::forstatement", "Expected open-parenthesis, instead got", tok);
     }
 
-    /*
-    tok = tokenizer.getToken();
-    if (tok.symbol() != '\n'){
-        die("Parser::assignStatement", "Expected an end of line token", tok);
-    }
-    */
-
 
     Statement* initStatement = assignStatement();
 
@@ -246,12 +241,6 @@ Statement* Parser::forstatement() {
     ExprNode* condition = rel_expr();
 
 
-    /*
-    tok = tokenizer.getToken();
-    if (tok.symbol() != '\n'){
-        die("Parser::assignStatement", "Expected an end of line token", tok);
-    }
-    */
 
     tok = tokenizer.getToken();
 
@@ -260,10 +249,6 @@ Statement* Parser::forstatement() {
     }
 
 
-    // tok = tokenizer.getToken();
-    // if (tok.symbol() != '\n'){
-    //     die("Parser::assignStatement", "Expected an end of line token", tok);
-    // }
 
 
     Statement* updateExpr = assignStatement();

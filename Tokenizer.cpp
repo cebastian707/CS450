@@ -104,6 +104,13 @@ Token Tokenizer::getToken() {
         else{
             token.symbol(c);
         }
+    }else if (c == '"') {  // recognize strings
+        std::string str;
+        while (inStream.get(c) && c != '"') {
+            str += c;
+
+        }
+        token.setString(str);
     }
     else if (c == '<'){
         char hola = inStream.peek();
