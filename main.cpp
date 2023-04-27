@@ -27,6 +27,8 @@ int main(int argc, char *argv[]) {
     Statements *statements = parser.statements();
     Token lastToken = tokenizer.getToken();
     if (!lastToken.eof()) {
+        std::cout<<"About to print tokens"<<std::endl;
+        tokenizer.printProcessedTokens();
         std::cout << "Unexpected token in input." << std::endl;
         lastToken.print();
         exit(1);
