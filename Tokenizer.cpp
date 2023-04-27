@@ -55,8 +55,13 @@ Token Tokenizer::getToken() {
     */
 
 
-    while( inStream.get(c) && isspace(c) && c != '\n')  // Skip spaces including the new-line chars.
-        ;
+    while( inStream.get(c) && (isspace(c) || c == '#') && c != '\n'){  // Skip spaces including the new-line chars.
+        if (c == '#'){
+            while (inStream.get(c) && c!= '\n')
+                ;
+         
+        }
+    }
 
     if(inStream.bad()) {
         std::cout << "Error while reading the input stream in Tokenizer.\n";
@@ -72,13 +77,17 @@ Token Tokenizer::getToken() {
     } else if( c == '\n' ) {  // will not ever be the case unless new-line characters are not supressed.
         //token.eol() = true;
         token.symbol(c);
-    } else if( isdigit(c) ) { // a integer?
+    }
+     else if( isdigit(c) ) { // a integer?
         // put the digit back into the input stream so
         // we read the entire number in a function
         inStream.putback(c);
         token.setWholeNumber( readInteger() );
 
-    } else if( c == '=' ) {
+    }else if (c == '#') {
+        while (inStream.get(c) && c != '\n');
+        return getToken();
+    }else if( c == '=' ) {
         char d = inStream.peek();
         if (d == '=') {
             inStream.get(d);
