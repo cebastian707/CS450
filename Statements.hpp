@@ -80,9 +80,10 @@ public:
         for (auto expr : _expressions) {
             TypeDescriptor* desc = expr->evaluate(symTab);
             if (desc->type() == TypeDescriptor::INTEGER) {
-                std::cout << dynamic_cast<NumberDescriptor*>(desc)->value.intValue;
+                //std::cout << dynamic_cast<NumberDescriptor*>(desc)->value.intValue << " " <<std::endl;
+                std::cout << " " << std::endl;
             } else if (desc->type() == TypeDescriptor::STRING) {
-                std::cout << dynamic_cast<StringDescriptor*>(desc)->str;
+                std::cout << dynamic_cast<StringDescriptor*>(desc)->str << " ";
             }
         }
         std::cout << std::endl;

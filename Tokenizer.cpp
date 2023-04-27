@@ -123,15 +123,17 @@ Token Tokenizer::getToken() {
     }else if (c == ','){
         std::string str;
         while (inStream.get(c)) {
-            if (c ==','){
+            if (isspace(c)){
+                continue;
+            }
+            if (c ==',' || c == ')'){
                 break;
-            }else {
-                str += c;
+            }if(isalpha(c)) {
+             token.symbol(c);
             }
 
         }
-        token.setName(str);
-        token.symbol(',');
+
      }
 
      else if (c == '"') {  // recognize strings

@@ -45,14 +45,13 @@ Statements *Parser::statements() {
             if (tok.eof()){
                 break;
             }
-        }else if(tok.getkeyword() == "print"){
-
-        }else if(tok.isName()){
-             tokenizer.ungetToken();
-            Statement *assignStmt = assignStatement();
-            stmts->addStatement(assignStmt);           
-
         }
+
+        tokenizer.ungetToken();
+        Statement *assignStmt = assignStatement();
+        stmts->addStatement(assignStmt);
+
+
        
         tok = tokenizer.getToken();
         while (tok.symbol() == '\n'){
@@ -344,23 +343,16 @@ std::vector<ExprNode*> Parser::testlist() {
         ExprNode* p = primary();
         exprs.push_back(p);
 
-        //look to see if there is a ,
-        tok = tokenizer.getToken();
-        if (tok.symbol() == ','){
-            //call  the expression to parse the entire expression
-            ExprNode *rightHandSideExpr = rel_expr();
-            exprs.push_back(rightHandSideExpr);
-        } else{//assume assume were parsing an experssion
-            ExprNode *hola = rel_expr();
-            exprs.push_back(hola);
-        }
-
+        //let's look for the first a and call rel expression
         //then get the token again
         tok = tokenizer.getToken();
 
+        p  = rel_expr();
+        exprs.push_back(p);
+
     }
 
-
+    tokenizer.ungetToken();
     return exprs;
 }
 
