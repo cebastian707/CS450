@@ -29,5 +29,6 @@ void Token::print() const {
     else if( isWholeNumber() ) std::cout << getWholeNumber();
     else if (_iskeyWord ) std::cout << _keyword;
     else if ( isNewLineChar() ) std::cout << "\n";
+    else if ( isCommentChar() ) std::cout<< '#';
     else std::cout << "Uninitialized token.\n";
 }
