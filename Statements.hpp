@@ -64,23 +64,36 @@ private:
 class PrintStatement : public Statement {
 public:
     PrintStatement();
-    PrintStatement(std::string lhsVar, ExprNode* expr) : _lhsVariable(lhsVar), _rhsExpression(expr) {}
+    PrintStatement(std::string lhsVar, std::vector<ExprNode*> exprs) : _lhsVariable(lhsVar), _expressions(exprs) {}
 
     std::string& lhsVariable();
-    ExprNode*& rhsExpression() { return _rhsExpression; }
+    std::vector<ExprNode*>& expressions() { return _expressions; }
 
     virtual void print() {
         std::cout << "PRINT " << _lhsVariable << std::endl;
+        for (auto expr : _expressions) {
+            expr->print();
+        }
     }
 
     virtual void evaluate(SymTab& symTab) {
-        _rhsExpression->evaluate(symTab);
+        for (auto expr : _expressions) {
+            TypeDescriptor* desc = expr->evaluate(symTab);
+            if (desc->type() == TypeDescriptor::INTEGER) {
+                std::cout << dynamic_cast<NumberDescriptor*>(desc)->value.intValue;
+            } else if (desc->type() == TypeDescriptor::STRING) {
+                std::cout << dynamic_cast<StringDescriptor*>(desc)->str;
+            }
+        }
+        std::cout << std::endl;
     }
 
 private:
     std::string _lhsVariable;
-    ExprNode* _rhsExpression;
+    std::vector<ExprNode*> _expressions;
 };
+
+
 
 
 class ForStatement : public Statement {

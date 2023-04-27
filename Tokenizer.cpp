@@ -49,10 +49,6 @@ Token Tokenizer::getToken() {
     }
 
     char c;
-    /*
-    while( inStream.get(c) && isspace(c) && c != '\n' )  // Skip spaces but not new-line chars.
-        ;
-    */
 
 
     while( inStream.get(c) && (isspace(c) || c == '#') && c != '\n'){  // Skip spaces including the new-line chars.
@@ -104,7 +100,21 @@ Token Tokenizer::getToken() {
         else{
             token.symbol(c);
         }
-    }else if (c == '"') {  // recognize strings
+    }else if (c == ','){
+        std::string str;
+        while (inStream.get(c)) {
+            if (c ==','){
+                break;
+            }else {
+                str += c;
+            }
+
+        }
+        token.setName(str);
+        token.symbol(',');
+     }
+
+     else if (c == '"') {  // recognize strings
         std::string str;
         while (inStream.get(c) && c != '"') {
             str += c;

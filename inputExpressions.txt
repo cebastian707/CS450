@@ -1,9 +1,3 @@
-course = "CS 460"
-print course
-for(i = 2; i < 20; i = i + 1) {
-     sum = 0
-     for(j = 1; j <= i; j = j + 1) {
-         sum = sum + j 
-     }
-     print sum
-} #test comment
+a = 10
+b = 20
+print("a =", a, "b =", b, "and the sum of the two is", a + b)

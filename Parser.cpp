@@ -63,13 +63,12 @@ Statement *Parser::assignStatement() {
     if (!varName.isName() && !varName.eof()) {
         // If the token is a keyword, parse a print statement instead
         if (varName.isKeyword() && varName.getkeyword() == "print") {
-            ExprNode *expr = print();
+            std::vector<ExprNode*> exprs = testlist();
             Token close = tokenizer.getToken();
-
-            if (close.symbol() != '\n'){
+            if (close.symbol() != '\n') {
                 die("Parser::assignStatement", "Expected an end of line token", close);
             }
-            return new PrintStatement(varName.getkeyword(), expr);
+            return new PrintStatement(varName.getkeyword(), exprs);
         }
 
         else {
@@ -327,9 +326,47 @@ Statement* Parser::forstatement() {
 
 Statement *Parser::print_quick(std::string keys) {
     ExprNode *expr = print();
-    return new PrintStatement(keys, expr);
+    //return new PrintStatement(keys, expr);
 }
 
+std::vector<ExprNode*> Parser::testlist() {
+    std::vector<ExprNode*> exprs;
+    Token tok = tokenizer.getToken();
+
+    //after looking at the word print look for the (
+    if (tok.symbol() != '('){
+        die("Parser::forstatement", "Expected open-parenthesis, instead got", tok);
+    }
+
+    //know look for the string qoutes
+    tok = tokenizer.getToken();
+
+    while (tok.strings()){
+        tokenizer.ungetToken();
+
+        //push back the string
+        ExprNode* p = primary();
+        exprs.push_back(p);
+
+        //look to see if there is a ,
+        tok = tokenizer.getToken();
+        if (tok.symbol() == ','){
+            //call  the expression to parse the entire expression
+            ExprNode *rightHandSideExpr = rel_expr();
+            exprs.push_back(rightHandSideExpr);
+        } else{//assume assume were parsing an experssion
+            ExprNode *hola = rel_expr();
+            exprs.push_back(hola);
+        }
+
+        //then get the token again
+        tok = tokenizer.getToken();
+
+    }
+
+
+    return exprs;
+}
 
 
 
