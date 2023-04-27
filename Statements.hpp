@@ -126,7 +126,7 @@ public:
         // Ensure the condition expression returns an integer value
         TypeDescriptor* conditionResult = _conditionExpression->evaluate(symTab);
         if (conditionResult->type() != TypeDescriptor::INTEGER) {
-            std::cout << "WhileStatement::evaluate: Type mismatch, expected INTEGER" << std::endl;
+            std::cout << "ForStatement::evaluate: Type mismatch, expected INTEGER" << std::endl;
             exit(1);
         }
 
@@ -137,7 +137,7 @@ public:
             // Re-evaluate the condition expression to check if the loop should continue
             conditionResult = _conditionExpression->evaluate(symTab);
             if (conditionResult->type() != TypeDescriptor::INTEGER) {
-                std::cout << "WhileStatement::evaluate: Type mismatch, expected INTEGER" << std::endl;
+                std::cout << "ForStatement::evaluate: Type mismatch, expected INTEGER" << std::endl;
                 exit(1);
             }
         }
