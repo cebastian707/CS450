@@ -36,8 +36,8 @@ TypeDescriptor* InfixExprNode::evaluate(SymTab &symTab) {
         result = dynamic_cast<NumberDescriptor *>(leftValue)->value.intValue - dynamic_cast<NumberDescriptor *>(rightValue)->value.intValue;
     }else if(token().isMultiplicationOperator()) {
         result = dynamic_cast<NumberDescriptor *>(leftValue)->value.intValue * dynamic_cast<NumberDescriptor *>(rightValue)->value.intValue;
-    }else if(token().isDivisionOperator()) {
-        result = dynamic_cast<NumberDescriptor *>(leftValue)->value.intValue / dynamic_cast<NumberDescriptor *>(rightValue)->value.intValue;
+    }else if(token().isDivisionOperator() || token()._isfloordivision()) {
+       result = static_cast<int>(dynamic_cast<NumberDescriptor *>(leftValue)->value.intValue / dynamic_cast<NumberDescriptor *>(rightValue)->value.intValue);
     }else if( token().isModuloOperator() ) {
         result = dynamic_cast<NumberDescriptor *>(leftValue)->value.intValue % dynamic_cast<NumberDescriptor *>(rightValue)->value.intValue;
     }else if(token().isLessThanOperator()) {

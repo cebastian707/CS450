@@ -11,18 +11,14 @@ class Token {
 
 public:
     Token();
-
     bool &eof()  { return _eof; }
     bool &eol()  { return _eol; }
-
     bool eof() const { return _eof; }
     bool eol() const  { return _eol; }
-
     bool isOpenParen() const  { return _symbol == '('; }
     bool isCloseParen() const { return _symbol == ')'; }
     bool isOpenCurly() const { return _symbol == '{'; }
     bool isCloseCurly() const { return _symbol == '}'; }
-
     void symbol(char c) { _symbol = c; }
     char symbol() { return _symbol; }
 
@@ -53,6 +49,7 @@ public:
     bool isGreaterThanEqualOperator() const {return _relationalSymbol == ">=";}
     bool isLessThanEqualOperator() const {return _relationalSymbol == "<=";}
     bool notEqualOperator() const {return _relationalSymbol == "!=";}
+    bool _isfloordivision()const{return _relationalSymbol == "//";}
 
     bool isRelationalOperator() const {
             return isGreaterThanOperator() ||
@@ -65,7 +62,7 @@ public:
     bool isName() const                   { return _name.length() > 0; }
     bool &isKeyword() { return _iskeyWord;}
     std::string getName() const                  { return _name; }
-    void setName(std::string n) { _name = n; }
+    void setName(std::string n) { _istring = false; _name = n; }
     bool strings(){return _istring;}
     bool &isWholeNumber() { return _isWholeNumber; }
     bool isWholeNumber() const { return _isWholeNumber; }

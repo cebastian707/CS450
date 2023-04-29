@@ -152,8 +152,16 @@ Token Tokenizer::getToken() {
             token.symbol(c);
         }
     }
-
-    else if( c == '+' || c == '-' || c == '*' || c == '/' || c == '%') {
+    else if ( c == '/'){
+        char estas = inStream.peek();
+        if (estas == '/'){
+            inStream.get(estas);
+            token.relationalSymbol("//");
+        } else{
+            token.symbol(c);
+        }
+    }
+    else if( c == '+' || c == '-' || c == '*' || c == '%') {
         token.symbol(c);
     }
 

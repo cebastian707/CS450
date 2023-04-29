@@ -134,7 +134,7 @@ ExprNode *Parser::term() {
     ExprNode *left = primary();
     Token tok = tokenizer.getToken();
 
-    while (tok.notEqualOperator() || (tok.isEqualToOperator() || tok.isGreaterThanEqualOperator() || tok.isGreaterThanOperator()  || tok.isLessThanEqualOperator() || tok.isLessThanOperator()) || tok.isMultiplicationOperator() || tok.isDivisionOperator() || tok.isModuloOperator()) {
+    while (tok._isfloordivision() || tok.notEqualOperator() || (tok.isEqualToOperator() || tok.isGreaterThanEqualOperator() || tok.isGreaterThanOperator()  || tok.isLessThanEqualOperator() || tok.isLessThanOperator()) || tok.isMultiplicationOperator() || tok.isDivisionOperator() || tok.isModuloOperator()) {
         InfixExprNode *p = new InfixExprNode(tok);
          p->left() = left;
         p->right() = primary();
@@ -300,41 +300,33 @@ std::vector<ExprNode*> Parser::testlist() {
     tok = tokenizer.getToken();
     ExprNode *expr;
 
-    // Loop through the testlist
-    while (tok.symbol() != ')') {
-        //check for a string
-        if (tok.strings()) {
+    while (tok.symbol() != ')'){
+        if (tok.strings()){
             tokenizer.ungetToken();
-            ExprNode *expr = primary();
+            expr = primary();
             exprs.push_back(expr);
-        }
-        // Check if the next token is a comma or a right parenthesis
-        tok = tokenizer.getToken();
-        if (tok.symbol() == ',') {
-            // If the next token is a comma, continue parsing the testlist
-           expr =  rel_expr();
-           exprs.push_back(expr);
-        }
-
-        if (tok.symbol() == ')') {
-            // If the next token is a right parenthesis, we're done parsing the testlist
-            break;
-        }
-        tok = tokenizer.getToken();
-        if (tok.symbol() == ','){
             tok = tokenizer.getToken();
         }
-        if (tok.symbol() == ')') {
-            // If the next token is a right parenthesis, we're done parsing the testlist
+        if (tok.symbol() ==  ')'){
             break;
         }
 
-        else{
-            //token is just a plan expression
-            expr =  rel_expr();
-            exprs.push_back(expr);
+        while (tok.symbol() == ','){
+            tok = tokenizer.getToken();
         }
 
+         if (!tok.strings()){
+            tokenizer.ungetToken();
+            expr = rel_expr();
+            exprs.push_back(expr);
+            tok = tokenizer.getToken();
+        }
+        while (tok.symbol() == ','){
+            tok = tokenizer.getToken();
+        }
+        if (tok.symbol() ==  ')'){
+            break;
+        }
     }
 
     return exprs;
