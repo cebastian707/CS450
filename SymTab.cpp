@@ -12,7 +12,7 @@ void SymTab::setValueFor(const std::string& vName, TypeDescriptor* desc) {
     if (desc->type() == TypeDescriptor::INTEGER) {
         std::cout << dynamic_cast<NumberDescriptor*>(desc)->value.intValue << std::endl;
     } else if (desc->type() == TypeDescriptor::STRING) {
-        std::cout << dynamic_cast<StringDescriptor*>(desc)->str << std::endl;
+        std::cout << dynamic_cast<StringDescriptor*>(desc)->str <<  " " <<std::endl;
     }
     symTab[vName] = desc;
 }

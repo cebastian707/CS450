@@ -34,17 +34,21 @@ Statements *Parser::statements() {
     while (tok.isName() || tok.isKeyword() || tok.isNewLineChar()) {
         if (tok.isNewLineChar()){
              tok = tokenizer.getToken();
-            std::cout << "Skipping newline char"<<std::endl;
-            continue;
+             std::cout << "Skipping newline char"<<std::endl;
+             continue;
         }
         if (tok.getkeyword() == "for"){
             Statement *stmt = forstatement();
             stmts->addStatement(stmt);
             tok = tokenizer.getToken();
+            while (tok.symbol() == '\n'||tok.symbol() == '}'){
+                tok = tokenizer.getToken();
+            }
 
             if (tok.eof()){
                 break;
             }
+
         }
 
         tokenizer.ungetToken();
@@ -226,6 +230,8 @@ ExprNode *Parser::print() {
     return p;
 }
 
+
+
 Statement* Parser::forstatement() {
     std::cout << "About to parse for loop"<<std::endl;
     Token tok = tokenizer.getToken();
@@ -259,7 +265,7 @@ Statement* Parser::forstatement() {
 
     tok = tokenizer.getToken();
     if (tok.symbol() != '\n'){
-        die("Parser::assignStatement", "Expected an end of line token", tok);
+        die("Parser::forStatement", "Expected an end of line token", tok);
     }
 
 
@@ -267,52 +273,10 @@ Statement* Parser::forstatement() {
 
     tok = tokenizer.getToken();
 
-    // while (tok.symbol() != '}') {
-    //     if (tok.getkeyword() == "for"){
-    //         Statement* st  = forstatement();
-    //         body->addStatement(st);
-
-    //         tok = tokenizer.getToken();
-
-    //         if (tok.symbol() != '\n'){
-    //             die("Parser::assignStatement", "Expected an end of line token", tok);
-    //         }
-
-
-
-    //         tok = tokenizer.getToken();
-    //         if (tok.symbol() =='}'){
-    //             break;
-    //         }
-
-
-    //     }
-
-    //     tokenizer.ungetToken();
-    //     Statement *stmt = assignStatement();
-    //     body->addStatement(stmt);
-
-
-    //     tok = tokenizer.getToken();
-
-    //     if (tok.symbol() =='}'){
-    //         break;
-    //     }
-
-
-    //     if (tok.symbol() != '\n'){
-    //         die("Parser::assignStatement", "Expected an end of line token", tok);
-    //     }
-
-    //     tok = tokenizer.getToken();
-    // }
 
     if (tok.symbol() != '}'){
         die("Parser::forstatement", "Expected }, instead got", tok);
     }
-
-
-
 
     ForStatement* forStmt = new ForStatement(initStatement, condition, updateExpr, body);
 
@@ -328,33 +292,54 @@ std::vector<ExprNode*> Parser::testlist() {
     std::vector<ExprNode*> exprs;
     Token tok = tokenizer.getToken();
 
-    //after looking at the word print look for the (
+    // Check if the testlist starts with a left parenthesis
     if (tok.symbol() != '('){
-        die("Parser::forstatement", "Expected open-parenthesis, instead got", tok);
+        die("Parser::testlist", "Expected open-parenthesis, instead got", tok);
     }
 
-    //know look for the string qoutes
     tok = tokenizer.getToken();
+    ExprNode *expr;
 
-    while (tok.strings()){
-        tokenizer.ungetToken();
-
-        //push back the string
-        ExprNode* p = primary();
-        exprs.push_back(p);
-
-        //let's look for the first a and call rel expression
-        //then get the token again
+    // Loop through the testlist
+    while (tok.symbol() != ')') {
+        //check for a string
+        if (tok.strings()) {
+            tokenizer.ungetToken();
+            ExprNode *expr = primary();
+            exprs.push_back(expr);
+        }
+        // Check if the next token is a comma or a right parenthesis
         tok = tokenizer.getToken();
+        if (tok.symbol() == ',') {
+            // If the next token is a comma, continue parsing the testlist
+           expr =  rel_expr();
+           exprs.push_back(expr);
+        }
 
-        p  = rel_expr();
-        exprs.push_back(p);
+        if (tok.symbol() == ')') {
+            // If the next token is a right parenthesis, we're done parsing the testlist
+            break;
+        }
+        tok = tokenizer.getToken();
+        if (tok.symbol() == ','){
+            tok = tokenizer.getToken();
+        }
+        if (tok.symbol() == ')') {
+            // If the next token is a right parenthesis, we're done parsing the testlist
+            break;
+        }
+
+        else{
+            //token is just a plan expression
+            expr =  rel_expr();
+            exprs.push_back(expr);
+        }
 
     }
 
-    tokenizer.ungetToken();
     return exprs;
 }
+
 
 
 

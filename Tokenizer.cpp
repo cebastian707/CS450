@@ -121,18 +121,7 @@ Token Tokenizer::getToken() {
             token.symbol(c);
         }
     }else if (c == ','){
-        std::string str;
-        while (inStream.get(c)) {
-            if (isspace(c)){
-                continue;
-            }
-            if (c ==',' || c == ')'){
-                break;
-            }if(isalpha(c)) {
-             token.symbol(c);
-            }
-
-        }
+        token.symbol(c);
 
      }
 
