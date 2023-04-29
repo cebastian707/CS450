@@ -1,4 +1,6 @@
 # This program provide a few simple tests for the second phase of the Python Interpreter.
+course = "CS 460"
+print(course)
 
 for(i = 2; i < 20; i = i + 1) {
      sum = 0
