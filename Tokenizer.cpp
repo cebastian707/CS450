@@ -60,22 +60,12 @@ Token Tokenizer::getToken() {
         }
     }
 
-        // while( inStream.get(c) && c != '\n' && (isspace(c) || c == '#')){  // Skip spaces including the new-line chars.
-    //     if (c == '#'){
-    //         while (inStream.get(c) && c!= '\n')
-    //             ;
-    //             inStream.putback(c);
-         
-    //     }
-    // }
 
     if(inStream.bad()) {
         std::cout << "Error while reading the input stream in Tokenizer.\n";
         exit(1);
     }
 
-
-    //std::cout << "c = " << c << std::endl;
 
     Token token;
     if( inStream.eof()) {
@@ -85,23 +75,30 @@ Token Tokenizer::getToken() {
         token.symbol(c);
     }
      else if( isdigit(c) ) { // a integer?
-        // put the digit back into the input stream so
-        // we read the entire number in a function
-        inStream.putback(c);
-        token.setWholeNumber( readInteger() );
 
+         char d  = inStream.peek();
+        if (d == '.'){
+            inStream.get(d);
+           std::string number_double;
+           number_double +=  c;
+            number_double += d;
+
+            while (inStream.get(c)){
+                if (isspace(c) || c == ',' || c == ')'){
+                    inStream.putback(c);
+                    break;
+                }
+                number_double+=c;
+            }
+            double number;
+            number = stod(number_double);
+            token.setdouble(number);
+        }
+         else{
+            inStream.putback(c);
+            token.setWholeNumber(readInteger());
+        }
     }
-    // else if (c == '#') {
-    //     std::cout<<"c is passed #"<<std::endl;
-    //     while (inStream.get(c) && c != '\n');
-    //     inStream.putback(c);
-    //     std::cout << "Processing comment: "<<c<<std::endl;
-    //     token = getToken();
-    //     token.print();
-    //     _tokens.push_back(token);
-    //     return lastToken = token;
-    //    // return getToken();
-    // }
     else if( c == '=' ) {
 
         char d = inStream.peek();

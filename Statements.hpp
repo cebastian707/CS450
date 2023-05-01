@@ -84,6 +84,8 @@ public:
                 std::cout << " " << std::endl;
             } else if (desc->type() == TypeDescriptor::STRING) {
                 std::cout << dynamic_cast<StringDescriptor*>(desc)->str << " ";
+            } else if (desc->type() == TypeDescriptor::DOUBLE){
+                std::cout << dynamic_cast<NumberDescriptor*>(desc)->value.doubleValue << " " <<std::endl;
             }
         }
         std::cout << std::endl;

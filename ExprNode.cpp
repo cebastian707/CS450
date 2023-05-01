@@ -27,17 +27,106 @@ TypeDescriptor* InfixExprNode::evaluate(SymTab &symTab) {
     TypeDescriptor* leftValue = left()->evaluate(symTab);
     TypeDescriptor* rightValue = right()->evaluate(symTab);
     int result = 0;
-   // if(debug)
-        //std::cout << "InfixExprNode::evaluate: " << lValue << " " <<
-            //token().symbol() << " " << rValue << std::endl;
+    double  answer = 0;
+
     if( token().isAdditionOperator() ) {
-        result = dynamic_cast<NumberDescriptor *>(leftValue)->value.intValue + dynamic_cast<NumberDescriptor *>(rightValue)->value.intValue;
+        if (leftValue->type() == TypeDescriptor::INTEGER && rightValue->type() == TypeDescriptor::DOUBLE){
+            answer = dynamic_cast<NumberDescriptor *>(leftValue)->value.intValue + dynamic_cast<NumberDescriptor *>(rightValue)->value.doubleValue;
+            TypeDescriptor* desc = new NumberDescriptor(TypeDescriptor::DOUBLE);
+            dynamic_cast<NumberDescriptor*>(desc)->value.doubleValue = answer;
+            return desc;
+        }
+        else if(leftValue->type() == TypeDescriptor::DOUBLE && rightValue->type() == TypeDescriptor::INTEGER){
+            answer = dynamic_cast<NumberDescriptor *>(leftValue)->value.doubleValue + dynamic_cast<NumberDescriptor *>(rightValue)->value.intValue;
+            TypeDescriptor* desc = new NumberDescriptor(TypeDescriptor::DOUBLE);
+            dynamic_cast<NumberDescriptor*>(desc)->value.doubleValue = answer;
+            return desc;
+
+        }
+        else if(leftValue->type() == TypeDescriptor::DOUBLE && rightValue->type() == TypeDescriptor::DOUBLE){
+            answer = dynamic_cast<NumberDescriptor *>(leftValue)->value.doubleValue + dynamic_cast<NumberDescriptor *>(rightValue)->value.doubleValue;
+            TypeDescriptor* desc = new NumberDescriptor(TypeDescriptor::DOUBLE);
+            dynamic_cast<NumberDescriptor*>(desc)->value.doubleValue = answer;
+            return desc;
+        }
+
+        else {
+            result = dynamic_cast<NumberDescriptor *>(leftValue)->value.intValue + dynamic_cast<NumberDescriptor *>(rightValue)->value.intValue;
+        }
     }else if(token().isSubtractionOperator()) {
-        result = dynamic_cast<NumberDescriptor *>(leftValue)->value.intValue - dynamic_cast<NumberDescriptor *>(rightValue)->value.intValue;
+        if (leftValue->type() == TypeDescriptor::INTEGER && rightValue->type() == TypeDescriptor::DOUBLE){
+            answer = dynamic_cast<NumberDescriptor *>(leftValue)->value.intValue - dynamic_cast<NumberDescriptor *>(rightValue)->value.doubleValue;
+            TypeDescriptor* desc = new NumberDescriptor(TypeDescriptor::DOUBLE);
+            dynamic_cast<NumberDescriptor*>(desc)->value.doubleValue = answer;
+            return desc;
+        }
+        else if(leftValue->type() == TypeDescriptor::DOUBLE && rightValue->type() == TypeDescriptor::INTEGER){
+            answer = dynamic_cast<NumberDescriptor *>(leftValue)->value.doubleValue - dynamic_cast<NumberDescriptor *>(rightValue)->value.intValue;
+            TypeDescriptor* desc = new NumberDescriptor(TypeDescriptor::DOUBLE);
+            dynamic_cast<NumberDescriptor*>(desc)->value.doubleValue = answer;
+            return desc;
+
+        }
+        else if(leftValue->type() == TypeDescriptor::DOUBLE && rightValue->type() == TypeDescriptor::DOUBLE){
+            answer = dynamic_cast<NumberDescriptor *>(leftValue)->value.doubleValue - dynamic_cast<NumberDescriptor *>(rightValue)->value.doubleValue;
+            TypeDescriptor* desc = new NumberDescriptor(TypeDescriptor::DOUBLE);
+            dynamic_cast<NumberDescriptor*>(desc)->value.doubleValue = answer;
+            return desc;
+        }
+
+        else {
+            result = dynamic_cast<NumberDescriptor *>(leftValue)->value.intValue - dynamic_cast<NumberDescriptor *>(rightValue)->value.intValue;
+        }
     }else if(token().isMultiplicationOperator()) {
-        result = dynamic_cast<NumberDescriptor *>(leftValue)->value.intValue * dynamic_cast<NumberDescriptor *>(rightValue)->value.intValue;
+        if (leftValue->type() == TypeDescriptor::INTEGER && rightValue->type() == TypeDescriptor::DOUBLE){
+            answer = dynamic_cast<NumberDescriptor *>(leftValue)->value.intValue * dynamic_cast<NumberDescriptor *>(rightValue)->value.doubleValue;
+            TypeDescriptor* desc = new NumberDescriptor(TypeDescriptor::DOUBLE);
+            dynamic_cast<NumberDescriptor*>(desc)->value.doubleValue = answer;
+            return desc;
+        }
+        else if(leftValue->type() == TypeDescriptor::DOUBLE && rightValue->type() == TypeDescriptor::INTEGER){
+            answer = dynamic_cast<NumberDescriptor *>(leftValue)->value.doubleValue * dynamic_cast<NumberDescriptor *>(rightValue)->value.intValue;
+            TypeDescriptor* desc = new NumberDescriptor(TypeDescriptor::DOUBLE);
+            dynamic_cast<NumberDescriptor*>(desc)->value.doubleValue = answer;
+            return desc;
+
+        }
+        else if(leftValue->type() == TypeDescriptor::DOUBLE && rightValue->type() == TypeDescriptor::DOUBLE){
+            answer = dynamic_cast<NumberDescriptor *>(leftValue)->value.doubleValue * dynamic_cast<NumberDescriptor *>(rightValue)->value.doubleValue;
+            TypeDescriptor* desc = new NumberDescriptor(TypeDescriptor::DOUBLE);
+            dynamic_cast<NumberDescriptor*>(desc)->value.doubleValue = answer;
+            return desc;
+        }
+
+        else {
+            result = dynamic_cast<NumberDescriptor *>(leftValue)->value.intValue * dynamic_cast<NumberDescriptor *>(rightValue)->value.intValue;
+        }
     }else if(token().isDivisionOperator() || token()._isfloordivision()) {
-       result = static_cast<int>(dynamic_cast<NumberDescriptor *>(leftValue)->value.intValue / dynamic_cast<NumberDescriptor *>(rightValue)->value.intValue);
+        if (leftValue->type() == TypeDescriptor::INTEGER && rightValue->type() == TypeDescriptor::DOUBLE){
+            answer = dynamic_cast<NumberDescriptor *>(leftValue)->value.intValue / dynamic_cast<NumberDescriptor *>(rightValue)->value.doubleValue;
+            TypeDescriptor* desc = new NumberDescriptor(TypeDescriptor::DOUBLE);
+            dynamic_cast<NumberDescriptor*>(desc)->value.doubleValue = answer;
+            return desc;
+        }
+
+        else if(leftValue->type() == TypeDescriptor::DOUBLE && rightValue->type() == TypeDescriptor::INTEGER){
+            answer = dynamic_cast<NumberDescriptor *>(leftValue)->value.doubleValue / dynamic_cast<NumberDescriptor *>(rightValue)->value.intValue;
+            TypeDescriptor* desc = new NumberDescriptor(TypeDescriptor::DOUBLE);
+            dynamic_cast<NumberDescriptor*>(desc)->value.doubleValue = answer;
+            return desc;
+
+        }
+
+        else if(leftValue->type() == TypeDescriptor::DOUBLE && rightValue->type() == TypeDescriptor::DOUBLE){
+            answer = dynamic_cast<NumberDescriptor *>(leftValue)->value.doubleValue / dynamic_cast<NumberDescriptor *>(rightValue)->value.doubleValue;
+            TypeDescriptor* desc = new NumberDescriptor(TypeDescriptor::DOUBLE);
+            dynamic_cast<NumberDescriptor*>(desc)->value.doubleValue = answer;
+            return desc;
+        }
+
+        else {
+            result = dynamic_cast<NumberDescriptor *>(leftValue)->value.intValue / dynamic_cast<NumberDescriptor *>(rightValue)->value.intValue;
+        }
     }else if( token().isModuloOperator() ) {
         result = dynamic_cast<NumberDescriptor *>(leftValue)->value.intValue % dynamic_cast<NumberDescriptor *>(rightValue)->value.intValue;
     }else if(token().isLessThanOperator()) {
@@ -92,7 +181,7 @@ TypeDescriptor* WholeNumber::evaluate(SymTab &symTab) {
         std::cout << "WholeNumber::evaluate: returning " << intValue << std::endl;
     TypeDescriptor* desc = new NumberDescriptor(TypeDescriptor::INTEGER);
     dynamic_cast<NumberDescriptor*>(desc)->value.intValue = intValue;
-    //symTab.setValueFor(token().getName(), desc);
+    
     return desc;
 }
 
@@ -137,5 +226,20 @@ void StringLiteral::print() {
 }
 
 
+DoubleNumber::DoubleNumber(Token token) : ExprNode(token) {
 
+}
 
+TypeDescriptor *DoubleNumber::evaluate(SymTab &symTab) {
+    double intValue = token().getdoubleNumber();
+    if (debug)
+        std::cout << "WholeNumber::evaluate: returning " << intValue << std::endl;
+    TypeDescriptor* desc = new NumberDescriptor(TypeDescriptor::DOUBLE);
+    dynamic_cast<NumberDescriptor*>(desc)->value.doubleValue = intValue;
+
+    return desc;
+}
+
+void DoubleNumber::print() {
+    token().print();
+}

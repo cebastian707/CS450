@@ -33,5 +33,6 @@ void Token::print() const {
     else if (_istring)std::cout<<_string;
     else if ( isNewLineChar() ) std::cout << "\n";
     else if ( isCommentChar() ) std::cout<< '#';
+    else if(_double_dl){std::cout << _double;}
     else std::cout << "Uninitialized token.\n";
 }

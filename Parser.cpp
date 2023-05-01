@@ -117,7 +117,7 @@ ExprNode *Parser::expr() {
         InfixExprNode *p = new InfixExprNode(tok);
         p->left() = left;
         p->right() = term();
-        left = p;
+         left = p;
         tok = tokenizer.getToken();
     }
     tokenizer.ungetToken();
@@ -158,7 +158,9 @@ ExprNode *Parser::primary() {
 
     if (tok.isWholeNumber()) {
         return new WholeNumber(tok);
-    } else if (tok.isName()) {
+    }else if(tok.isdecimal()){
+        return new DoubleNumber(tok);
+    }else if (tok.isName()) {
         return new Variable(tok);
     } else if (tok.strings()){
         return new StringLiteral(tok);
@@ -230,8 +232,6 @@ ExprNode *Parser::print() {
     return p;
 }
 
-
-
 Statement* Parser::forstatement() {
     std::cout << "About to parse for loop"<<std::endl;
     Token tok = tokenizer.getToken();
@@ -281,11 +281,6 @@ Statement* Parser::forstatement() {
     ForStatement* forStmt = new ForStatement(initStatement, condition, updateExpr, body);
 
     return forStmt;
-}
-
-Statement *Parser::print_quick(std::string keys) {
-    ExprNode *expr = print();
-    //return new PrintStatement(keys, expr);
 }
 
 std::vector<ExprNode*> Parser::testlist() {
