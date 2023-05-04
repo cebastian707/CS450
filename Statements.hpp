@@ -113,15 +113,23 @@ public:
 
 
     virtual void print() {
+        int count = 0;
         std::cout << "for ";
         _variable->print();
-        std::cout << " in ";
+        std::cout << " in range(";
         for (auto it : _iterable) {
             it->print();
-            std::cout << ",";
+
+            if (_iterable.size() - 1 == 2 && count < 2){
+                std::cout << ",";
+                count++;
+             } else if (_iterable.size()-1 == 1 and count < 1){
+                std::cout << ",";
+                count++;
+            }
         }
         std::cout << "): " << std::endl;
-        _body->print();
+        std::cout<<"    "; _body->print();
     }
 
     virtual void evaluate(SymTab& symTab) {

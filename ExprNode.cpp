@@ -166,12 +166,11 @@ void WholeNumber::print() {
     token().print();
 }
 
-
 TypeDescriptor* StringLiteral::evaluate(SymTab& symTab) {
     std::string strValue = this->token().getstring();
     TypeDescriptor* desc = new StringDescriptor(TypeDescriptor::STRING);
     dynamic_cast<StringDescriptor*>(desc)->str = strValue;
-    //symTab.setValueFor(token().getName(), desc);
+
     return desc;
 }
 
@@ -184,9 +183,6 @@ TypeDescriptor* WholeNumber::evaluate(SymTab &symTab) {
     
     return desc;
 }
-
-
-// Variable
 
 Variable::Variable(Token token): ExprNode{token} {}
 
