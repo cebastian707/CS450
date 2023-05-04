@@ -7,14 +7,14 @@
 
 void SymTab::setValueFor(const std::string& vName, TypeDescriptor* desc) {
     if (debug) {
-    }
-    std::cout << vName << " -> ";
-    if (desc->type() == TypeDescriptor::INTEGER) {
-        std::cout << dynamic_cast<NumberDescriptor*>(desc)->value.intValue << std::endl;
-    } else if (desc->type() == TypeDescriptor::STRING) {
-        std::cout << dynamic_cast<StringDescriptor*>(desc)->str <<  " " <<std::endl;
-    }else if (desc->type() == TypeDescriptor::DOUBLE){
-        std::cout << dynamic_cast<NumberDescriptor*>(desc)->value.doubleValue <<  " " <<std::endl;
+        std::cout << vName << " -> ";
+        if (desc->type() == TypeDescriptor::INTEGER) {
+            std::cout << dynamic_cast<NumberDescriptor*>(desc)->value.intValue-1 << std::endl;
+        } else if (desc->type() == TypeDescriptor::STRING) {
+            std::cout << dynamic_cast<StringDescriptor*>(desc)->str <<  " " <<std::endl;
+        }else if (desc->type() == TypeDescriptor::DOUBLE){
+            std::cout << dynamic_cast<NumberDescriptor*>(desc)->value.doubleValue <<  " " <<std::endl;
+        }
     }
     symTab[vName] = desc;
 }

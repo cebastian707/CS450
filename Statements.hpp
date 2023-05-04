@@ -10,6 +10,7 @@
 
 #include "ExprNode.hpp"
 #include "SymTab.hpp"
+#include "Range.hpp"
 
 // The Statement (abstract) class serves as a super class for all statements that
 // are defined in the language. Ultimately, statements have to be evaluated.
@@ -102,61 +103,135 @@ private:
 class ForStatement : public Statement {
 public:
     ForStatement() {}
-    ForStatement(AssignmentStatement* initStmt, ExprNode* condExpr, AssignmentStatement* updateExpr, Statements* body) :
-            _initStatement(initStmt), _conditionExpression(condExpr), _updateExpression(updateExpr), _body(body) {}
 
-    ForStatement(Statement *pStatement, ExprNode *pNode, Statement *pStatement1, Statements *pStatements) {
-        _initStatement = dynamic_cast<AssignmentStatement *>(pStatement);
-        _conditionExpression = pNode;
-        _updateExpression = dynamic_cast<AssignmentStatement *>(pStatement1);
-        _body = pStatements;
-    }
+    ForStatement(ExprNode* variable, std::vector<ExprNode*> iterable, Statements* body) :
+            _variable(variable), _iterable(iterable), _body(body) {}
 
-    AssignmentStatement*& initStatement() { return _initStatement; }
-    ExprNode*& conditionExpression() { return _conditionExpression; }
-    AssignmentStatement*& updateExpression() { return _updateExpression; }
+    ExprNode*& variable() { return _variable; }
+    std::vector<ExprNode*>& iterable() { return _iterable; }
     Statements*& body() { return _body; }
 
+
     virtual void print() {
-        std::cout << "for ( "; _initStatement->print();std::cout << ";  "; _conditionExpression->print(); std::cout << "; ";_updateExpression->print(); std::cout << ") {";
+        std::cout << "for ";
+        _variable->print();
+        std::cout << " in ";
+        for (auto it : _iterable) {
+            it->print();
+            std::cout << ",";
+        }
+        std::cout << "): " << std::endl;
         _body->print();
-        std::cout << "}";
     }
 
     virtual void evaluate(SymTab& symTab) {
-        _initStatement->evaluate(symTab);
+        // Set the initial value of the loop variable to 0
+        TypeDescriptor* desc = new NumberDescriptor(TypeDescriptor::INTEGER);
 
-        // Ensure the condition expression returns an integer value
-        TypeDescriptor* conditionResult = _conditionExpression->evaluate(symTab);
-        if (conditionResult->type() != TypeDescriptor::INTEGER) {
-            std::cout << "ForStatement::evaluate: Type mismatch, expected INTEGER" << std::endl;
-            exit(1);
+
+        if (_iterable.size()-1 == 0) {
+            //set i equal to zero
+            dynamic_cast<NumberDescriptor*>(desc)->value.intValue = 0;
+            symTab.setValueFor(_variable->token().getName(), desc);
+
+            //range value get it
+            int range = dynamic_cast<NumberDescriptor *>(_iterable[0]->evaluate(symTab))->value.intValue;
+
+            //initlaize the range value
+            Range *rangeInstance = new Range(range);
+
+
+            // Loop through the range instance values
+            while (rangeInstance->condition()) {
+                // Get the next value from the range instance and set it to the loop variable
+                int loopVal = rangeInstance->next();
+                dynamic_cast<NumberDescriptor *>(desc)->value.intValue = loopVal;
+
+                // Evaluate the loop body
+                _body->evaluate(symTab);
+
+                // Evaluate the loop variable
+                symTab.setValueFor(_variable->token().getName(), desc);
+            }
+
         }
 
-        while (dynamic_cast<NumberDescriptor*>(conditionResult)->value.intValue != 0) {
-            _body->evaluate(symTab);
-            _updateExpression->evaluate(symTab);
+        else if (_iterable.size()-1 == 1){
+            //range value start value
+            int start = dynamic_cast<NumberDescriptor *>(_iterable[0]->evaluate(symTab))->value.intValue;
 
-            // Re-evaluate the condition expression to check if the loop should continue
-            conditionResult = _conditionExpression->evaluate(symTab);
-            if (conditionResult->type() != TypeDescriptor::INTEGER) {
-                std::cout << "ForStatement::evaluate: Type mismatch, expected INTEGER" << std::endl;
-                exit(1);
+            dynamic_cast<NumberDescriptor*>(desc)->value.intValue = start;
+            symTab.setValueFor(_variable->token().getName(), desc);
+
+
+            //get the end value of the range
+            int end = dynamic_cast<NumberDescriptor *>(_iterable[1]->evaluate(symTab))->value.intValue;
+
+            //initlaize the range value
+            Range *rangeInstance = new Range(start,end);
+
+            // Loop through the range instance values
+            while (rangeInstance->condition()) {
+                // Get the next value from the range instance and set it to the loop variable
+                int loopVal = rangeInstance->next();
+
+                dynamic_cast<NumberDescriptor *>(desc)->value.intValue = loopVal;
+
+                // Evaluate the loop body
+                _body->evaluate(symTab);
+
+                // Evaluate the loop variable
+                symTab.setValueFor(_variable->token().getName(), desc);
             }
+
+
+        }
+
+        else if (_iterable.size()-1 == 2){
+            //range value start value
+            int start = dynamic_cast<NumberDescriptor *>(_iterable[0]->evaluate(symTab))->value.intValue;
+
+
+            //set the i variable to the intial value
+            dynamic_cast<NumberDescriptor*>(desc)->value.intValue = start;
+            symTab.setValueFor(_variable->token().getName(), desc);
+
+
+
+
+            //get the end value of the range
+            int end = dynamic_cast<NumberDescriptor *>(_iterable[1]->evaluate(symTab))->value.intValue;
+
+            //get the step value
+            int step  = dynamic_cast<NumberDescriptor *>(_iterable[2]->evaluate(symTab))->value.intValue;
+
+
+            //initlaize the range value
+            Range *rangeInstance = new Range(start,end,step);
+
+            // Loop through the range instance values
+            while (rangeInstance->condition()) {
+                // Get the next value from the range instance and set it to the loop variable
+                int loopVal = rangeInstance->next();
+                dynamic_cast<NumberDescriptor *>(desc)->value.intValue = loopVal;
+
+                // Evaluate the loop body
+                _body->evaluate(symTab);
+
+                // Evaluate the loop variable
+                symTab.setValueFor(_variable->token().getName(), desc);
+            }
+        } else{
+            std::cout << "Range only takes three values"<<std::endl;
         }
     }
 
 
+
+
 private:
-    AssignmentStatement* _initStatement;
-    ExprNode* _conditionExpression;
-    AssignmentStatement* _updateExpression;
+    ExprNode* _variable;
+    std::vector<ExprNode*> _iterable;
     Statements* _body;
 };
-
-
-
-
-
-
 #endif //APYTHONINTERPRETER_STATEMENTS_HPP

@@ -5,6 +5,8 @@ file(REMOVE_RECURSE
   "CMakeFiles/APythonInterpreter.dir/ExprNode.cpp.o.d"
   "CMakeFiles/APythonInterpreter.dir/Parser.cpp.o"
   "CMakeFiles/APythonInterpreter.dir/Parser.cpp.o.d"
+  "CMakeFiles/APythonInterpreter.dir/Range.cpp.o"
+  "CMakeFiles/APythonInterpreter.dir/Range.cpp.o.d"
   "CMakeFiles/APythonInterpreter.dir/Statements.cpp.o"
   "CMakeFiles/APythonInterpreter.dir/Statements.cpp.o.d"
   "CMakeFiles/APythonInterpreter.dir/SymTab.cpp.o"

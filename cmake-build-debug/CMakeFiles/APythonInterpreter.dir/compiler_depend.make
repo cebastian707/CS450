@@ -859,7 +859,11 @@ CMakeFiles/APythonInterpreter.dir/Parser.cpp.o: ../Parser.cpp \
   /Library/Developer/CommandLineTools/SDKs/MacOSX12.3.sdk/usr/include/c++/v1/optional \
   /Library/Developer/CommandLineTools/SDKs/MacOSX12.3.sdk/usr/include/c++/v1/__tree \
   ../ExprNode.hpp \
-  ../Statements.hpp
+  ../Statements.hpp \
+  ../Range.hpp
+
+CMakeFiles/APythonInterpreter.dir/Range.cpp.o: ../Range.cpp \
+  ../Range.hpp
 
 CMakeFiles/APythonInterpreter.dir/Statements.cpp.o: ../Statements.cpp \
   ../Statements.hpp \
@@ -1287,7 +1291,8 @@ CMakeFiles/APythonInterpreter.dir/Statements.cpp.o: ../Statements.cpp \
   /Library/Developer/CommandLineTools/SDKs/MacOSX12.3.sdk/usr/include/c++/v1/__functional/is_transparent.h \
   /Library/Developer/CommandLineTools/SDKs/MacOSX12.3.sdk/usr/include/c++/v1/__node_handle \
   /Library/Developer/CommandLineTools/SDKs/MacOSX12.3.sdk/usr/include/c++/v1/optional \
-  /Library/Developer/CommandLineTools/SDKs/MacOSX12.3.sdk/usr/include/c++/v1/__tree
+  /Library/Developer/CommandLineTools/SDKs/MacOSX12.3.sdk/usr/include/c++/v1/__tree \
+  ../Range.hpp
 
 CMakeFiles/APythonInterpreter.dir/SymTab.cpp.o: ../SymTab.cpp \
   /Library/Developer/CommandLineTools/SDKs/MacOSX12.3.sdk/usr/include/c++/v1/iostream \
@@ -3404,7 +3409,8 @@ CMakeFiles/APythonInterpreter.dir/main.cpp.o: ../main.cpp \
   /Library/Developer/CommandLineTools/SDKs/MacOSX12.3.sdk/usr/include/c++/v1/optional \
   /Library/Developer/CommandLineTools/SDKs/MacOSX12.3.sdk/usr/include/c++/v1/__tree \
   ../ExprNode.hpp \
-  ../Statements.hpp
+  ../Statements.hpp \
+  ../Range.hpp
 
 
 ../TypeDescriptor.cpp:
@@ -3412,6 +3418,8 @@ CMakeFiles/APythonInterpreter.dir/main.cpp.o: ../main.cpp \
 ../Token.cpp:
 
 ../SymTab.cpp:
+
+../Range.cpp:
 
 /Library/Developer/CommandLineTools/SDKs/MacOSX12.3.sdk/usr/include/c++/v1/iomanip:
 
@@ -3800,6 +3808,8 @@ CMakeFiles/APythonInterpreter.dir/main.cpp.o: ../main.cpp \
 /Library/Developer/CommandLineTools/SDKs/MacOSX12.3.sdk/usr/include/c++/v1/tuple:
 
 /Library/Developer/CommandLineTools/SDKs/MacOSX12.3.sdk/usr/include/sys/syslimits.h:
+
+../Range.hpp:
 
 /Library/Developer/CommandLineTools/SDKs/MacOSX12.3.sdk/usr/include/arm/_limits.h:
 

@@ -162,7 +162,7 @@ Token Tokenizer::getToken() {
         token.symbol(c);
     }
 
-    else if( c == ';' ) {
+    else if( c == ';' || c == ':' ) {
         token.symbol(c);
     }
 
@@ -175,7 +175,7 @@ Token Tokenizer::getToken() {
         // put c back into the stream so we can read the entire name in a function.
         inStream.putback(c);
         std::string name = readName();
-        if (name == "print" || name == "for"){
+        if (name == "print" || name == "for" || name == "range" || name == "in"){
             token.setkeyword(name);
         }
         else{

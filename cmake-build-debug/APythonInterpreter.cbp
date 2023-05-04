@@ -92,6 +92,12 @@
 		<Unit filename="/Users/cebastiansantiago/CLionProjects/project3/Parser.hpp">
 			<Option target="APythonInterpreter"/>
 		</Unit>
+		<Unit filename="/Users/cebastiansantiago/CLionProjects/project3/Range.cpp">
+			<Option target="APythonInterpreter"/>
+		</Unit>
+		<Unit filename="/Users/cebastiansantiago/CLionProjects/project3/Range.hpp">
+			<Option target="APythonInterpreter"/>
+		</Unit>
 		<Unit filename="/Users/cebastiansantiago/CLionProjects/project3/Statements.cpp">
 			<Option target="APythonInterpreter"/>
 		</Unit>

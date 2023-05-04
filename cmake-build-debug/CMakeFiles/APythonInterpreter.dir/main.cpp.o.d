@@ -432,4 +432,5 @@ CMakeFiles/APythonInterpreter.dir/main.cpp.o: \
   /Library/Developer/CommandLineTools/SDKs/MacOSX12.3.sdk/usr/include/c++/v1/optional \
   /Library/Developer/CommandLineTools/SDKs/MacOSX12.3.sdk/usr/include/c++/v1/__tree \
   /Users/cebastiansantiago/CLionProjects/project3/ExprNode.hpp \
-  /Users/cebastiansantiago/CLionProjects/project3/Statements.hpp
+  /Users/cebastiansantiago/CLionProjects/project3/Statements.hpp \
+  /Users/cebastiansantiago/CLionProjects/project3/Range.hpp

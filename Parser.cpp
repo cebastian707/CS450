@@ -34,7 +34,7 @@ Statements *Parser::statements() {
     while (tok.isName() || tok.isKeyword() || tok.isNewLineChar()) {
         if (tok.isNewLineChar()){
              tok = tokenizer.getToken();
-             std::cout << "Skipping newline char"<<std::endl;
+             //std::cout << "Skipping newline char"<<std::endl;
              continue;
         }
         if (tok.getkeyword() == "for"){
@@ -50,6 +50,7 @@ Statements *Parser::statements() {
             }
 
         }
+
 
         tokenizer.ungetToken();
         Statement *assignStmt = assignStatement();
@@ -234,51 +235,92 @@ ExprNode *Parser::print() {
 
 Statement* Parser::forstatement() {
     std::cout << "About to parse for loop"<<std::endl;
+    std::cout << "Key word  for has beened parsed"<<std::endl;
+
     Token tok = tokenizer.getToken();
 
+    tokenizer.ungetToken();
+
+    //get the variable name
+    ExprNode* variable = rel_expr();
+
+
+    //look for the key word in
+    tok = tokenizer.getToken();
+
+    //if not key word in exit out
+    if (tok.getkeyword() != "in"){
+        die("Parser::forstatement", "Execpeted keyword in", tok);
+        exit(1);
+    }
+
+    //look for the keyword range
+    tok = tokenizer.getToken();
+
+    if (tok.getkeyword() != "range"){
+        die("Parser::forstatement", "Execpeted keyword range", tok);
+        exit(1);
+    }
+
+    //look for the open ( parenthesis
+    tok = tokenizer.getToken();
+
     if (tok.symbol() != '('){
-        die("Parser::forstatement", "Expected open-parenthesis, instead got", tok);
-    }
-    Statement* initStatement = assignStatement();
-    tok = tokenizer.getToken();
-    if (tok.symbol() != ';'){
-        die("Parser::forstatement", "Expected ; instead got", tok);
+        die("Parser::forstatement", "Execpeted (", tok);
+        exit(1);
     }
 
-    ExprNode* condition = rel_expr();
-    tok = tokenizer.getToken();
-    if (tok.symbol() != ';'){
-        die("Parser::forstatement", "Expected ; instead got", tok);
-    }
-    Statement* updateExpr = assignStatement();
+    //start parsing the range we need digits
+    std::vector<ExprNode*> nums;
+    ExprNode *start = rel_expr();
+    nums.push_back(start);
 
+
+    //start looking for the second number or look for a )
     tok = tokenizer.getToken();
+
+    if (tok.symbol() == ','){
+        start = rel_expr();
+
+        nums.push_back(start);
+
+        tok = tokenizer.getToken();
+
+        if (tok.symbol() == ','){
+            start = rel_expr();
+            nums.push_back(start);
+            tok = tokenizer.getToken();
+        }
+
+    }
+
+
     if (tok.symbol() != ')'){
-        die("Parser::forstatement", "Expected close-parenthesis, instead got", tok);
+        die("Parser::forstatement", "Execpeted )", tok);
+        exit(1);
     }
 
+    //look for the :
     tok = tokenizer.getToken();
-    if (tok.symbol() != '{'){
-        die("Parser::forstatement", "Expected {, instead got", tok);
+
+    if (tok.symbol() != ':'){
+        die("Parser::forstatement", "Execpeted :", tok);
+        exit(1);
     }
 
 
     tok = tokenizer.getToken();
+
     if (tok.symbol() != '\n'){
-        die("Parser::forStatement", "Expected an end of line token", tok);
+        die("Parser::forstatement", "Execpeted newline", tok);
+        exit(1);
     }
 
-
+    //parse the body of the for loop
     Statements* body = statements();
 
-    tok = tokenizer.getToken();
 
-
-    if (tok.symbol() != '}'){
-        die("Parser::forstatement", "Expected }, instead got", tok);
-    }
-
-    ForStatement* forStmt = new ForStatement(initStatement, condition, updateExpr, body);
+    ForStatement* forStmt = new ForStatement(variable,nums,body);
 
     return forStmt;
 }

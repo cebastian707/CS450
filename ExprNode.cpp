@@ -207,11 +207,6 @@ TypeDescriptor* Variable::evaluate(SymTab &symTab) {
         std::cout << "Variable::evaluate: Value for variable " << token().getName() << " is null" << std::endl;
         exit(1);
     }
-    if (desc->type() == TypeDescriptor::INTEGER) {
-        //std::cout << dynamic_cast<NumberDescriptor*>(desc)->value.intValue << " " << std::endl;
-    } else if (desc->type() == TypeDescriptor::STRING) {
-        //std::cout << dynamic_cast<StringDescriptor*>(desc)->str <<  " " <<  std::endl;
-    }
 
     return desc;
 }
