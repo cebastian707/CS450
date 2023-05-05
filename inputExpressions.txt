@@ -1,9 +1,8 @@
 # This program provide a few simple tests for the second phase of the Python Interpreter.
 
-start = 1
-stop = 5
-step = 2
+x = 1
+y = 0
 
-for i in range(start, stop, step):
-    print(i)
+print(not x)  # prints False
+print(not y)  # prints True
 

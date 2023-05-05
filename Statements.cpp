@@ -32,8 +32,9 @@ AssignmentStatement::AssignmentStatement(std::string lhsVar, ExprNode *rhsExpr):
         _lhsVariable{lhsVar}, _rhsExpression{rhsExpr} {}
 
 void AssignmentStatement::evaluate(SymTab &symTab) {
-    auto rhs = rhsExpression()->evaluate(symTab);
-    symTab.setValueFor(lhsVariable(), reinterpret_cast<TypeDescriptor *>(rhs));
+        auto rhs = rhsExpression()->evaluate(symTab);
+        symTab.setValueFor(lhsVariable(), reinterpret_cast<TypeDescriptor *>(rhs));
+
 }
 
 std::string &AssignmentStatement::lhsVariable() {

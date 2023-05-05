@@ -20,14 +20,91 @@ InfixExprNode::InfixExprNode(Token tk) : ExprNode{tk}, _left(nullptr), _right(nu
 
 ExprNode *&InfixExprNode::left() { return _left; }
 
-ExprNode *&InfixExprNode::right() { return _right; }
+ExprNode *&InfixExprNode::right() {
+    return _right;
+}
 
 TypeDescriptor* InfixExprNode::evaluate(SymTab &symTab) {
+    //not test case
+    if (token().getkeyword() == "not") {
+        //test case jaun if true return false
+        TypeDescriptor* leftValue = left()->evaluate(symTab);
+        if (dynamic_cast<NumberDescriptor *>(leftValue)->value.intValue == 1) {
+            TypeDescriptor* desc = new NumberDescriptor(TypeDescriptor::BOOL);
+            dynamic_cast<NumberDescriptor*>(desc)->value.boolValue = 0;
+            return desc;
+        }
+            //else return true
+        else {
+            TypeDescriptor* desc = new NumberDescriptor(TypeDescriptor::BOOL);
+            dynamic_cast<NumberDescriptor*>(desc)->value.boolValue = 1;
+            return desc;
+        }
+    }
+
+
+
+
+
+
     // Evaluates an infix expression using a post-order traversal of the expression tree.
     TypeDescriptor* leftValue = left()->evaluate(symTab);
     TypeDescriptor* rightValue = right()->evaluate(symTab);
+
+
     int result = 0;
     double  answer = 0;
+
+
+
+
+
+
+    //or test case
+    if (token().getkeyword() == "or"){
+        //first test case if the left value is true  return true
+        if (dynamic_cast<NumberDescriptor *>(leftValue)->value.intValue == 1){
+            TypeDescriptor* desc = new NumberDescriptor(TypeDescriptor::BOOL);
+            dynamic_cast<NumberDescriptor*>(desc)->value.boolValue = 1;
+            return desc;
+        }
+        //second test if left is false and right is true return true
+        else if (dynamic_cast<NumberDescriptor *>(leftValue)->value.intValue == 0 && dynamic_cast<NumberDescriptor*>(rightValue)->value.intValue ==1){
+            TypeDescriptor* desc = new NumberDescriptor(TypeDescriptor::BOOL);
+            dynamic_cast<NumberDescriptor*>(desc)->value.boolValue = 1;
+            return desc;
+        }
+        //if both left and right are false return false
+        else if (dynamic_cast<NumberDescriptor *>(leftValue)->value.intValue == 0 && dynamic_cast<NumberDescriptor*>(rightValue)->value.intValue == 0){
+            TypeDescriptor* desc = new NumberDescriptor(TypeDescriptor::BOOL);
+            dynamic_cast<NumberDescriptor*>(desc)->value.boolValue = 0;
+            return desc;
+        }
+    }
+
+    //and test case
+    if (token().getkeyword() == "and"){
+        //first test case if the left value is false.return false
+        if (dynamic_cast<NumberDescriptor *>(leftValue)->value.intValue == 0){
+            TypeDescriptor* desc = new NumberDescriptor(TypeDescriptor::BOOL);
+            dynamic_cast<NumberDescriptor*>(desc)->value.boolValue = 0;
+            return desc;
+        }
+        //second test case is if left value and right value is true return true
+        else if (dynamic_cast<NumberDescriptor *>(leftValue)->value.intValue == 1 && dynamic_cast<NumberDescriptor*>(rightValue)->value.intValue == 1){
+            TypeDescriptor* desc = new NumberDescriptor(TypeDescriptor::BOOL);
+            dynamic_cast<NumberDescriptor*>(desc)->value.boolValue = 1;
+            return desc;
+        }
+
+        //last test case if left value is true but the right value is false return false
+        else if (dynamic_cast<NumberDescriptor *>(leftValue)->value.intValue == 1 && dynamic_cast<NumberDescriptor*>(rightValue)->value.intValue == 0){
+            TypeDescriptor* desc = new NumberDescriptor(TypeDescriptor::BOOL);
+            dynamic_cast<NumberDescriptor*>(desc)->value.boolValue = 0;
+            return desc;
+        }
+    }
+
 
     if( token().isAdditionOperator() ) {
         if (leftValue->type() == TypeDescriptor::INTEGER && rightValue->type() == TypeDescriptor::DOUBLE){
@@ -156,7 +233,9 @@ TypeDescriptor* InfixExprNode::evaluate(SymTab &symTab) {
 void InfixExprNode::print() {
     _left->print();
     token().print();
-    _right->print();
+    if (_right != nullptr) {
+        _right->print();
+    }
 }
 
 // WHoleNumber

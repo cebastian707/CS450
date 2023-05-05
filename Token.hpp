@@ -75,6 +75,7 @@ public:
         _keyword = key;
         isKeyword() = true;
         _double_dl = false;
+        _istring = false;
     }
 
     void setString(const std::string& str) {

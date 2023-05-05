@@ -36,12 +36,10 @@ class InfixExprNode: public ExprNode {  // An expression tree node.
 
 public:
     explicit InfixExprNode(Token tk);
-
     ExprNode *&left();
     ExprNode *&right();
     void print () override;
     TypeDescriptor* evaluate(SymTab &symTab) override;
-
 private:
     ExprNode *_left, *_right;
 };

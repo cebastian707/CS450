@@ -24,23 +24,36 @@ public:
     Statement *print_quick(std::string keys);
     ExprNode *print();
     Statement * forstatement();
-    ExprNode *expr();
-    ExprNode *term();
-    ExprNode *primary();
-    std::string id();
+    //ExprNode *expr();
+    //ExprNode *term();
+    //ExprNode *primary();
+    //std::string id();
 
 private:
     Tokenizer &tokenizer;
 
     void die(std::string where, std::string message, Token &token);
 
-    ExprNode *rel_primary();
-
-    ExprNode *rel_term();
-
-    ExprNode *rel_expr();
-
     std::vector<ExprNode *> testlist();
+
+    ExprNode *comparison();
+
+    ExprNode *not_test();
+
+    ExprNode *and_test();
+
+    ExprNode *or_test();
+
+    ExprNode *test();
+
+    ExprNode *arith_expr();
+
+    ExprNode *factor();
+
+    ExprNode *atoms();
+
+
+    ExprNode *term();
 };
 
 

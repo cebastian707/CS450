@@ -87,6 +87,13 @@ public:
                 std::cout << dynamic_cast<StringDescriptor*>(desc)->str << " ";
             } else if (desc->type() == TypeDescriptor::DOUBLE){
                 std::cout << dynamic_cast<NumberDescriptor*>(desc)->value.doubleValue << " " <<std::endl;
+            } else if (desc->type() == TypeDescriptor::BOOL){
+                short bool_value = dynamic_cast<NumberDescriptor*>(desc)->value.boolValue;
+                if (bool_value == 0) {
+                    std::cout << "False"<< std::endl;
+                } else{
+                    std::cout << "True" << std::endl;
+                }
             }
         }
         std::cout << std::endl;
@@ -96,9 +103,6 @@ private:
     std::string _lhsVariable;
     std::vector<ExprNode*> _expressions;
 };
-
-
-
 
 class ForStatement : public Statement {
 public:
@@ -233,10 +237,6 @@ public:
             std::cout << "Range only takes three values"<<std::endl;
         }
     }
-
-
-
-
 private:
     ExprNode* _variable;
     std::vector<ExprNode*> _iterable;
