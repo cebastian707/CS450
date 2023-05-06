@@ -19,7 +19,7 @@ public:
     bool isCloseParen() const { return _symbol == ')'; }
     bool isOpenCurly() const { return _symbol == '{'; }
     bool isCloseCurly() const { return _symbol == '}'; }
-    void symbol(char c) { _symbol = c; }
+    void symbol(char c) {_double_dl = false;_istring = false; _symbol = c; }
     char symbol() { return _symbol; }
 
 

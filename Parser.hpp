@@ -24,6 +24,7 @@ public:
     Statement *print_quick(std::string keys);
     ExprNode *print();
     Statement * forstatement();
+    Statement * ifstatement();
     //ExprNode *expr();
     //ExprNode *term();
     //ExprNode *primary();

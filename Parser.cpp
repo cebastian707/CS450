@@ -51,6 +51,24 @@ Statements *Parser::statements() {
 
         }
 
+        if (tok.getkeyword() == "if"){
+            Statement *stmt = ifstatement();
+            stmts->addStatement(stmt);
+
+            tok = tokenizer.getToken();
+            while (tok.symbol() == '\n'||tok.symbol() == '}'){
+                tok = tokenizer.getToken();
+            }
+
+            if (tok.eof()){
+                break;
+            }
+        }
+
+        if (tok.getkeyword() == "elif" || tok.getkeyword() == "else"){
+            break;
+        }
+
 
         tokenizer.ungetToken();
         Statement *assignStmt = assignStatement();
@@ -62,7 +80,9 @@ Statements *Parser::statements() {
         while (tok.symbol() == '\n'){
             tok = tokenizer.getToken();
         }
-
+        if (tok.getkeyword() == "elif" || tok.getkeyword() == "else"){
+            break;
+        }
     }
     tokenizer.ungetToken();
     return stmts;
@@ -388,6 +408,112 @@ ExprNode* Parser::atoms() {
         return nullptr;  // unreachable, but quiets the warning
     }
 }
+
+Statement *Parser::ifstatement() {
+    //we've enter the if statement means the if statement word has been parsed
+    //know were looking for the test of the if statement
+    //create a vector of ExprNode
+    Token tok;
+    std::vector<ExprNode*> if_comparssion;
+    std::vector<ExprNode*> elif_comparssion;
+    std::vector<Statements*> elifs_body;
+
+    //call test to grab the boolean expression
+    ExprNode* tests = test();
+    if_comparssion.push_back(tests);
+
+    //know look for the :
+    tok = tokenizer.getToken();
+
+    if (tok.symbol() != ':'){
+        die("Parser::if statement", "Execpeted :", tok);
+        exit(1);
+    }
+
+    //know parse the body of the if statement
+    std::vector<Statements*> body;
+
+    Statements* if_body = statements();
+
+    body.push_back(if_body);
+
+
+    //check for ane elif statement
+    tok = tokenizer.getToken();
+
+    while (tok.getkeyword() == "elif"){
+        //parse the realtion experssion
+        ExprNode* eilf = test();
+        elif_comparssion.push_back(eilf);
+
+        //know look for the :
+        tok = tokenizer.getToken();
+
+        if (tok.symbol() != ':'){
+            die("Parser::elif statement", "Execpeted :", tok);
+            exit(1);
+        }
+
+        Statements* elif_body = statements();
+
+        elifs_body.push_back(elif_body);
+
+        //get a token again
+        tok = tokenizer.getToken();
+
+        //if there's no else were done and no more elifs statement done and return the 2nd constuctor
+        if (tok.getkeyword() != "elif" && tok.getkeyword() != "else"){
+            //return the 2nd constructor
+            IfStatement* elif = new IfStatement(if_comparssion,body,elif_comparssion,elifs_body);
+            return elif;
+
+        }
+
+        //if there's an else statement we know we need the 3rd constructor
+        if (tok.getkeyword() != "elif" && tok.getkeyword() == "else"){
+            //look for the :
+            tok = tokenizer.getToken();
+
+            if (tok.symbol() != ':'){
+                die("Parser::else statement", "Execpeted :", tok);
+                exit(1);
+            }
+
+            Statements* elses = statements();
+
+            IfStatement* elsess =  new IfStatement(if_comparssion,body,elif_comparssion,elifs_body,elses);
+
+            return elsess;
+
+        }
+    }
+
+    //if there's an else statement and no elif we know we need the 3rd constructor
+    if (tok.getkeyword() == "else"){
+        //look for the :
+        tok = tokenizer.getToken();
+
+        if (tok.symbol() != ':'){
+            die("Parser::else statement", "Execpeted :", tok);
+            exit(1);
+        }
+
+        Statements* elses = statements();
+
+        IfStatement* elsess =  new IfStatement(if_comparssion,body,elif_comparssion,elifs_body,elses);
+
+        return elsess;
+
+    }
+
+    //use constructor one
+    IfStatement* ifs = new IfStatement(if_comparssion,body);
+    return ifs;
+}
+
+
+
+
 
 
 

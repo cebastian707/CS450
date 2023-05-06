@@ -1,8 +1,7 @@
-# This program provide a few simple tests for the second phase of the Python Interpreter.
+# This program provide a few simple tests for the third phase of the Python Interpreter.
 
-x = 1
-y = 0
+x = 90
+y = 15
 
-print(not x)  # prints False
-print(not y)  # prints True
-
+if x > y:
+    print("x is greater than y")

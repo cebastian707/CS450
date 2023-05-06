@@ -29,7 +29,6 @@ public:
 
 // Statements is a collection of Statement. For example, all statements in a function
 // can be represented by an instance of Statements.
-
 class Statements {
 public:
     Statements();
@@ -45,7 +44,6 @@ private:
 
 // AssignmentStatement represents the notion of an lValue having been assigned an rValue.
 // The rValue is an expression.
-
 class AssignmentStatement : public Statement {
 public:
     AssignmentStatement();
@@ -242,4 +240,92 @@ private:
     std::vector<ExprNode*> _iterable;
     Statements* _body;
 };
+
+
+
+class IfStatement : public Statement {
+public:
+    IfStatement(std::vector<ExprNode *> testExprs, std::vector<Statements *> ifBodies) :
+            _testExprs(testExprs), _ifBodies(ifBodies) {}
+
+
+    IfStatement(std::vector<ExprNode *> testExprs, std::vector<Statements *> ifBodies,std::vector<ExprNode *> elifTestExprs, std::vector<Statements *> elifBodies) :
+            _testExprs(testExprs), _ifBodies(ifBodies),_elifTestExprs(elifTestExprs), _elifBodies(elifBodies) {}
+
+    IfStatement(std::vector<ExprNode *> testExprs, std::vector<Statements *> ifBodies,std::vector<ExprNode *> elifTestExprs, std::vector<Statements *> elifBodies,Statements *elseBody) :
+            _testExprs(testExprs), _ifBodies(ifBodies),_elifTestExprs(elifTestExprs), _elifBodies(elifBodies), _elseBody(elseBody) {}
+
+    virtual void print() {
+        for (int i = 0; i < _testExprs.size(); i++) {
+            std::cout << "if ";
+            _testExprs[i]->print();
+            std::cout << ":" << std::endl;
+            std::cout << "    ";
+            _ifBodies[i]->print();
+        }
+
+        for (int i = 0; i < _elifTestExprs.size(); i++) {
+            std::cout << "elif ";
+            _elifTestExprs[i]->print();
+            std::cout << ":" << std::endl;
+            std::cout << "    ";
+            _elifBodies[i]->print();
+        }
+
+        if (_elseBody != nullptr) {
+            std::cout << "else:" << std::endl;
+            std::cout << "    ";
+            _elseBody->print();
+        }
+    }
+
+    virtual void evaluate(SymTab &symTab) {
+        bool executed = false;
+
+        for (int i = 0; i < _testExprs.size(); i++) {
+            // Evaluate the test expression
+            TypeDescriptor *testValue = _testExprs[i]->evaluate(symTab);
+
+            // Check if the test expression is true or false
+            if (dynamic_cast<NumberDescriptor *>(testValue)->value.intValue == 1 ||
+                dynamic_cast<NumberDescriptor *>(testValue)->value.boolValue == 1) {
+                // Evaluate the if body
+                _ifBodies[i]->evaluate(symTab);
+                executed = true;
+                break;
+            }
+        }
+
+        if (!executed && !_elifTestExprs.empty()) {
+            for (int i = 0; i < _elifTestExprs.size(); i++) {
+                // Evaluate the test expression
+                TypeDescriptor *testValue = _elifTestExprs[i]->evaluate(symTab);
+
+                // Check if the test expression is true or false
+                if (dynamic_cast<NumberDescriptor *>(testValue)->value.intValue == 1 ||
+                    dynamic_cast<NumberDescriptor *>(testValue)->value.boolValue == 1) {
+                    // Evaluate the elif body
+                    _elifBodies[i]->evaluate(symTab);
+                    executed = true;
+                    break;
+                }
+            }
+        }
+
+        if (!executed && _elseBody != nullptr) {
+            // Evaluate the else body
+            _elseBody->evaluate(symTab);
+        }
+    }
+
+private:
+    std::vector<ExprNode *> _testExprs;
+    std::vector<Statements *> _ifBodies;
+    std::vector<ExprNode *> _elifTestExprs;
+    std::vector<Statements *> _elifBodies;
+    Statements *_elseBody;
+
+};
+
+
 #endif //APYTHONINTERPRETER_STATEMENTS_HPP

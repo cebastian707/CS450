@@ -269,7 +269,6 @@ void Variable::print() {
     token().print();
 }
 
-
 TypeDescriptor* Variable::evaluate(SymTab &symTab) {
     if (!symTab.isDefined(token().getName())) {
         std::cout << "Use of undefined variable, " << token().getName() << std::endl;
@@ -286,7 +285,6 @@ TypeDescriptor* Variable::evaluate(SymTab &symTab) {
     return desc;
 }
 
-
 StringLiteral::StringLiteral(Token token) : ExprNode(token) {
 
 }
@@ -294,7 +292,6 @@ StringLiteral::StringLiteral(Token token) : ExprNode(token) {
 void StringLiteral::print() {
     token().print();
 }
-
 
 DoubleNumber::DoubleNumber(Token token) : ExprNode(token) {
 
