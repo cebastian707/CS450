@@ -1,5 +1,4 @@
 # This program provide a few simple tests for the third phase of the Python Interpreter.
-
 x = 90
 y = 115
 for i in range(5):

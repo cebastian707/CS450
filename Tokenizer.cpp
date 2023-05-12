@@ -13,11 +13,16 @@ std::string Tokenizer::readName() {
 
     std::string name;
     char c;
-    while( inStream.get(c) && isalnum(c) ) {
+    while( inStream.get(c) && (isalnum(c) || c == '_')) {
         name += c;
     }
-    if(inStream.good())  // In the loop, we have read one char too many.
+    if(inStream.good()){  // In the loop, we have read one char too many.
+        if (!isspace(c) && c != '(' && c != ')' && c != '{' && c != '}' && c != ':' && c != ',') {
+            std::cout << "Unexpected character. ->" << c << "<-" << std::endl;
+            exit(1);
+        }
         inStream.putback(c);
+    }
 
     return name;
 }
@@ -54,7 +59,7 @@ Token Tokenizer::getToken() {
     Token token;
 
     if (parsingANewLine) {
-        parsingANewLine = false;
+        //parsingANewLine = false;
         //std::cout<<"about to be Processing a new line"<<std::endl;
         int numSpaces = 0;
         while (inStream.get(c) && c == ' ') {
@@ -244,6 +249,7 @@ Token Tokenizer::getToken() {
         // put c back into the stream so we can read the entire name in a function.
         inStream.putback(c);
         std::string name = readName();
+
         if (name == "print" || name == "for" || name == "else" || name == "range" || name == "in" || name == "and" || name == "not" || name == "or" || name == "if" || name == "elif"){
             token.setkeyword(name);
         }
@@ -270,3 +276,4 @@ void Tokenizer::printProcessedTokens() {
         //std::cout << std::endl;
     }
 }
+

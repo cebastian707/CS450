@@ -38,13 +38,17 @@ Statements *Parser::statements() {
              continue;
         }
         if (tok.getkeyword() == "for"){
+            std::cout<<"In statements for loop 1"<<std::endl;
             Statement *stmt = forstatement();
+                        std::cout<<"In statements for loop 2"<<std::endl;
             stmts->addStatement(stmt);
+                        std::cout<<"In statements for loop 3"<<std::endl;
             tok = tokenizer.getToken();
+                        std::cout<<"In statements for loop 4"<<std::endl;
             while (tok.symbol() == '\n'||tok.symbol() == '}'){
                 tok = tokenizer.getToken();
             }
-
+                                 std::cout<<"In statements for loop 4"<<std::endl;
             if (tok.eof()){
                 break;
             }
@@ -52,6 +56,7 @@ Statements *Parser::statements() {
         }
 
         if (tok.getkeyword() == "if"){
+               
             Statement *stmt = ifstatement();
             stmts->addStatement(stmt);
 
@@ -64,8 +69,9 @@ Statements *Parser::statements() {
                 break;
             }
         }
-
+       
         if (tok.getkeyword() == "elif" || tok.getkeyword() == "else"){
+                           
             std::cout<<"Breaking out of statement loop having encountered else"<<std::endl;
             break;
         }
@@ -75,13 +81,14 @@ Statements *Parser::statements() {
         Statement *assignStmt = assignStatement();
         stmts->addStatement(assignStmt);
 
-
-       
+        
+                  
         tok = tokenizer.getToken();
         while (tok.symbol() == '\n'){
             tok = tokenizer.getToken();
         }
         if (tok.getkeyword() == "elif" || tok.getkeyword() == "else"){
+                           
             break;
         }
     }
@@ -185,7 +192,7 @@ ExprNode *Parser::print() {
 Statement* Parser::forstatement() {
     //std::cout << "About to parse for loop"<<std::endl;
   //  std::cout << "Key word  for has beened parsed"<<std::endl;
-
+    std::cout<<"Entering forstatemnt()"<<std::endl;
     Token tok = tokenizer.getToken();
 
     tokenizer.ungetToken();
@@ -283,9 +290,9 @@ Statement* Parser::forstatement() {
         exit(1);
     }
 
-
+      
     ForStatement* forStmt = new ForStatement(variable,nums,body);
-
+    
     return forStmt;
 }
 
@@ -329,8 +336,9 @@ std::vector<ExprNode*> Parser::testlist() {
             break;
         }
     }
-
+        //std::cout<<"Ext forstatemnt()"<<std::endl;
     return exprs;
+           //std::cout<<"E2xt forstatemnt()"<<std::endl;
 }
 
 ExprNode *Parser::or_test() {
@@ -429,6 +437,7 @@ Statement *Parser::ifstatement() {
     //we've enter the if statement means the if statement word has been parsed
     //know were looking for the test of the if statement
     //create a vector of ExprNode
+   // std::cout<<"Made it to the if statement"<<std::endl;
     Token tok;
     std::vector<ExprNode*> if_comparssion;
     std::vector<ExprNode*> elif_comparssion;
@@ -472,11 +481,14 @@ Statement *Parser::ifstatement() {
         exit(1);
     }
 
-
+  //  std::cout<<"Made it to the top of elif if statement before gettoken"<<std::endl;
     //check for ane elif statement
     tok = tokenizer.getToken();
-
+   // std::cout<<"Made it to the top of elif if statement after gettoken"<<std::endl;
+   // std::cout << "tok.getkeyword(): " << tok.getkeyword() << std::endl;
+    //std::cout<<"Made it to the top of elif"<<std::endl;
     while (tok.getkeyword() == "elif"){
+  //      std::cout<<"Made it to the inside of elif if statement"<<std::endl;
         //parse the realtion experssion
         ExprNode* eilf = test();
         elif_comparssion.push_back(eilf);
@@ -484,12 +496,32 @@ Statement *Parser::ifstatement() {
         //know look for the :
         tok = tokenizer.getToken();
 
-        if (tok.symbol() != ':'){
-            die("Parser::elif statement", "Execpeted :", tok);
-            exit(1);
-        }
+    if (tok.symbol() != ':'){
+        die("Parser::elif statement", "Execpeted :", tok);
+        exit(1);
+     }
+
+    tok = tokenizer.getToken();
+    if (!tok.isNewLineChar()){
+        die("If stmt:", "Expected newline",tok);
+        exit(1);
+
+    }
+    //std::cout<<"Made it to the top of ident elif statement"<<std::endl;
+    tok = tokenizer.getToken();
+     if (!tok.isIndent()){
+        die("If stmt:", "Expected indent",tok);
+        exit(1);
+    }
 
         Statements* elif_body = statements();
+   // std::cout<<"Made it to the top of dedent elif statement"<<std::endl;
+    tok = tokenizer.getToken();
+    if (!tok.isDedent()){
+        die("For loop:", "Expected dedent",tok);
+        exit(1);
+    }
+  //  std::cout<<"Made it to the bottom of dedent elif statement"<<std::endl;
 
         elifs_body.push_back(elif_body);
 
@@ -499,6 +531,7 @@ Statement *Parser::ifstatement() {
         //if there's no else were done and no more elifs statement done and return the 2nd constuctor
         if (tok.getkeyword() != "elif" && tok.getkeyword() != "else"){
             //return the 2nd constructor
+            tok = tokenizer.getToken();
             IfStatement* elif = new IfStatement(if_comparssion,body,elif_comparssion,elifs_body);
             return elif;
 
@@ -514,8 +547,29 @@ Statement *Parser::ifstatement() {
                 exit(1);
             }
 
-            Statements* elses = statements();
 
+
+        tok = tokenizer.getToken();
+        if (!tok.isNewLineChar()){
+            die("If stmt:", "Expected newline",tok);
+             exit(1);
+        }
+
+        tok = tokenizer.getToken();
+        if (!tok.isIndent()){
+            die("If stmt:", "Expected indent",tok);
+            exit(1);
+        }    
+
+
+        Statements* elses = statements();
+
+        tok = tokenizer.getToken();
+        if (!tok.isDedent()){
+            die("If stmt:", "Expected dedent",tok);
+            exit(1);
+        }
+        //std::cout<<"Made it to the bottom of elif"<<std::endl;
             IfStatement* elsess =  new IfStatement(if_comparssion,body,elif_comparssion,elifs_body,elses);
 
             return elsess;
@@ -523,20 +577,40 @@ Statement *Parser::ifstatement() {
         }
     }
 
+    std::cout<<"Made it to before else"<<std::endl;
     //if there's an else statement and no elif we know we need the 3rd constructor
     if (tok.getkeyword() == "else"){
         //look for the :
         tok = tokenizer.getToken();
-
+         std::cout<<"1Made it to before else"<<std::endl;
         if (tok.symbol() != ':'){
             die("Parser::else statement", "Execpeted :", tok);
             exit(1);
         }
+        std::cout<<"2Made it to before else"<<std::endl;
+        tok = tokenizer.getToken();
+        if (!tok.isNewLineChar()){
+            die("If stmt:", "Expected newline",tok);
+            exit(1);
 
+        }
+        std::cout<<"3Made it to before else"<<std::endl;
+        tok = tokenizer.getToken();
+        if (!tok.isIndent()){
+            die("If stmt:", "Expected indent",tok);
+            exit(1);
+        }
+        std::cout<<"4Made it to before else"<<std::endl;
         Statements* elses = statements();
-
+        std::cout<<"5Made it to before else"<<std::endl;
+        tok = tokenizer.getToken();
+        if (!tok.isDedent()) {
+            die("If stmt:", "Expected dedent", tok);
+            exit(1);
+        }
+        std::cout<<"5Made it to before else"<<std::endl;
         IfStatement* elsess =  new IfStatement(if_comparssion,body,elif_comparssion,elifs_body,elses);
-
+        std::cout<<"3Made it to before else"<<std::endl;
         return elsess;
 
     }
@@ -545,15 +619,3 @@ Statement *Parser::ifstatement() {
     IfStatement* ifs = new IfStatement(if_comparssion,body);
     return ifs;
 }
-
-
-
-
-
-
-
-
-
-
-
-

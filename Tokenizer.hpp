@@ -17,6 +17,7 @@ public:
     Token getToken();
     void ungetToken();
     void printProcessedTokens();
+    void skipWhiteSpace();
 
 private:
     Token lastToken;
