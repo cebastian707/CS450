@@ -66,6 +66,7 @@ Statements *Parser::statements() {
         }
 
         if (tok.getkeyword() == "elif" || tok.getkeyword() == "else"){
+            std::cout<<"Breaking out of statement loop having encountered else"<<std::endl;
             break;
         }
 
@@ -263,9 +264,22 @@ Statement* Parser::forstatement() {
         die("Parser::forstatement", "Execpeted newline", tok);
         exit(1);
     }
+    tok = tokenizer.getToken();
+    if (!tok.isIndent()){
+        die("For loop:", "Expected indent",tok);
+        exit(1);
+    }
+
 
     //parse the body of the for loop
+    
     Statements* body = statements();
+
+    tok = tokenizer.getToken();
+    if (!tok.isDedent()){
+        die("For loop:", "Expected dedent",tok);
+        exit(1);
+    }
 
 
     ForStatement* forStmt = new ForStatement(variable,nums,body);
@@ -424,11 +438,18 @@ Statement *Parser::ifstatement() {
 
     //know look for the :
     tok = tokenizer.getToken();
-
+    std::cout<<"Made it to just before :"<<std::endl;
     if (tok.symbol() != ':'){
         die("Parser::if statement", "Execpeted :", tok);
         exit(1);
     }
+    std::cout<<"About to get indent token"<<std::endl;
+    tok = tokenizer.getToken();
+     if (!tok.isIndent()){
+        die("If stmt:", "Expected indent",tok);
+        exit(1);
+    }
+
 
     //know parse the body of the if statement
     std::vector<Statements*> body;
@@ -436,6 +457,11 @@ Statement *Parser::ifstatement() {
     Statements* if_body = statements();
 
     body.push_back(if_body);
+    tok = tokenizer.getToken();
+     if (!tok.isDedent()){
+        die("If stmt:", "Expected dedent",tok);
+        exit(1);
+    }
 
 
     //check for ane elif statement

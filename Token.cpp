@@ -34,5 +34,8 @@ void Token::print() const {
     else if ( isNewLineChar() ) std::cout << "\n";
     else if ( isCommentChar() ) std::cout<< '#';
     else if(_double_dl){std::cout << _double;}
+    else if(isIndent()) std::cout << "Indent";
+    else if(isDedent())std::cout<<"Dedent";
+    
     else std::cout << "Uninitialized token.\n";
 }

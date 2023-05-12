@@ -19,6 +19,9 @@ public:
     bool isCloseParen() const { return _symbol == ')'; }
     bool isOpenCurly() const { return _symbol == '{'; }
     bool isCloseCurly() const { return _symbol == '}'; }
+    bool isIndent() const { return _indent;}
+    bool isDedent() const {return _dedent; }
+
     void symbol(char c) {_double_dl = false;_istring = false; _symbol = c; }
     char symbol() { return _symbol; }
 
@@ -35,6 +38,7 @@ public:
     bool isSubtractionOperator() const    { return _symbol == '-'; }
     bool isModuloOperator() const         { return _symbol == '%'; }
     bool isDivisionOperator() const       { return _symbol == '/'; }
+    
     bool isArithmeticOperator() const {
         return isMultiplicationOperator() ||
                isAdditionOperator() ||
@@ -70,6 +74,8 @@ public:
     bool &_isdouble(){return  _double_dl;}
     int getWholeNumber() const { return _wholeNumber; }
     double getdoubleNumber()const{return _double;}
+    void indent() { _indent = true;}
+    void dedent() { _dedent = true;}
     std::string getkeyword(){return _keyword;}
     void setkeyword(std::string key){
         _keyword = key;
@@ -102,6 +108,14 @@ public:
         _istring = false;
     }
 
+    void setIndent(bool indent){
+        this->_indent = indent;
+    }
+
+    void setDedent(bool dedent){
+        this->_dedent = dedent;
+    }
+
 private:
     std::string _name;
     bool _eof, _eol;
@@ -115,6 +129,8 @@ private:
     bool _iskeyWord = false;
     std::string _keyword;
     std::string _string;
+    bool _indent;
+    bool _dedent;
 };
 
 

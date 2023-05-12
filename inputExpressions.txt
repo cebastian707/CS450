@@ -1,7 +1,13 @@
 # This program provide a few simple tests for the third phase of the Python Interpreter.
 
 x = 90
-y = 15
-
+y = 115
+for i in range(5):
+    print(i)
 if x > y:
     print("x is greater than y")
+else:
+    print("x is less than y")
+    print("test")
+    print("test2")
+

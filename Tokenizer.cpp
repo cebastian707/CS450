@@ -37,7 +37,9 @@ int Tokenizer::readInteger() {
     return intValue;
 }
 
-Tokenizer::Tokenizer(std::ifstream &stream): ungottenToken{false}, inStream{stream}, lastToken{} {}
+Tokenizer::Tokenizer(std::ifstream &stream): ungottenToken{false}, inStream{stream}, lastToken{},parsingANewLine{true} {
+    indentLevels.push_back(0);
+}
 
 
 
@@ -49,6 +51,43 @@ Token Tokenizer::getToken() {
     }
 
     char c;
+    Token token;
+
+    if (parsingANewLine) {
+        parsingANewLine = false;
+        std::cout<<"about to be Processing a new line"<<std::endl;
+        int numSpaces = 0;
+        while (inStream.get(c) && c == ' ') {
+            numSpaces++;
+        }
+        inStream.putback(c);
+
+        if (c != '\n') {
+            parsingANewLine = false;
+            if (numSpaces == indentLevels.back()) {
+                // Case 1: do nothing
+            } else if (numSpaces > indentLevels.back()) {
+                // Case 2: indent more!
+                indentLevels.push_back(numSpaces);
+                token.setIndent(true);
+                return lastToken = token;
+            } else {
+                // Case 3: dedent!
+                while (numSpaces < indentLevels.back()) {
+                    indentLevels.pop_back();
+                    token.setDedent(true);
+                    return lastToken = token;
+                }
+
+                if (numSpaces != indentLevels.back()) {
+                    std::cout << "Error: Invalid indentation level." << std::endl;
+                    exit(1);
+                }
+            }
+        }
+    }
+
+    
 
 
     while( inStream.get(c) && c != '\n' && (isspace(c) || c == '#')){  // Skip spaces including the new-line chars.
@@ -58,7 +97,7 @@ Token Tokenizer::getToken() {
                 inStream.putback(c);
          
         }
-    }
+    }  
 
 
     if(inStream.bad()) {
@@ -67,11 +106,12 @@ Token Tokenizer::getToken() {
     }
 
 
-    Token token;
+    //Token token;
     if( inStream.eof()) {
         token.eof() = true;
     } else if( c == '\n' ) {  // will not ever be the case unless new-line characters are not supressed.
         //token.eol() = true;
+        parsingANewLine = true;
         token.symbol(c);
     }
      else if( isdigit(c) ) { // a integer?

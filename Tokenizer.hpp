@@ -23,6 +23,8 @@ private:
     bool ungottenToken;
     std::ifstream &inStream;
     std::vector<Token> _tokens;
+    std::vector<int> indentLevels;
+    bool parsingANewLine;
 
 private:
     std::string readName();
