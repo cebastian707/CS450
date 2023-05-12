@@ -107,7 +107,7 @@ Statement *Parser::assignStatement() {
         }
 
         else {
-            die("Parser::assignStatement", "Expected a name token or keyword, instead got", varName);
+            die("Parser::assignStatement", "Expected a name token or keyword, instead got: ", varName);
         }
     }
 
@@ -183,8 +183,8 @@ ExprNode *Parser::print() {
 }
 
 Statement* Parser::forstatement() {
-    std::cout << "About to parse for loop"<<std::endl;
-    std::cout << "Key word  for has beened parsed"<<std::endl;
+    //std::cout << "About to parse for loop"<<std::endl;
+  //  std::cout << "Key word  for has beened parsed"<<std::endl;
 
     Token tok = tokenizer.getToken();
 
@@ -264,7 +264,9 @@ Statement* Parser::forstatement() {
         die("Parser::forstatement", "Execpeted newline", tok);
         exit(1);
     }
+
     tok = tokenizer.getToken();
+
     if (!tok.isIndent()){
         die("For loop:", "Expected indent",tok);
         exit(1);
@@ -438,12 +440,19 @@ Statement *Parser::ifstatement() {
 
     //know look for the :
     tok = tokenizer.getToken();
-    std::cout<<"Made it to just before :"<<std::endl;
+    //std::cout<<"Made it to just before :"<<std::endl;
     if (tok.symbol() != ':'){
         die("Parser::if statement", "Execpeted :", tok);
         exit(1);
     }
-    std::cout<<"About to get indent token"<<std::endl;
+
+   // std::cout<<"About to get indent token"<<std::endl;
+    tok = tokenizer.getToken();
+    if (!tok.isNewLineChar()){
+        die("If stmt:", "Expected newline",tok);
+        exit(1);
+
+    }
     tok = tokenizer.getToken();
      if (!tok.isIndent()){
         die("If stmt:", "Expected indent",tok);

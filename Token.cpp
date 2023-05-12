@@ -37,5 +37,5 @@ void Token::print() const {
     else if(isIndent()) std::cout << "Indent";
     else if(isDedent())std::cout<<"Dedent";
     
-    else std::cout << "Uninitialized token.\n";
+    else std::cout << "Uninitialized token: " << _symbol << std::endl;
 }

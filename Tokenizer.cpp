@@ -55,7 +55,7 @@ Token Tokenizer::getToken() {
 
     if (parsingANewLine) {
         parsingANewLine = false;
-        std::cout<<"about to be Processing a new line"<<std::endl;
+        //std::cout<<"about to be Processing a new line"<<std::endl;
         int numSpaces = 0;
         while (inStream.get(c) && c == ' ') {
             numSpaces++;
@@ -161,6 +161,35 @@ Token Tokenizer::getToken() {
         token.symbol(c);
 
      }
+
+         //check the subtraction sysmbol
+    else if (c == '-'){
+        //peek if theres a digit
+        char d = inStream.peek();
+
+        //if we have a digit lets get it
+        if (isdigit(d)){
+            inStream.get(d);
+
+            std::string number_double;
+            number_double +=  c;
+            number_double += d;
+            while (inStream.get(c)){
+                if (isspace(c) || c == ',' || c == ')'){
+                    inStream.putback(c);
+                    break;
+                }
+                number_double+=c;
+            }
+            int  number;
+            number = std::stoi(number_double);
+            token.setWholeNumber(number);
+
+        } else{
+            //if no negative digit return the minus sign
+            token.symbol('-');
+        }
+    }
 
      else if (c == '"') {  // recognize strings
         std::string str;
