@@ -1,5 +1,5 @@
 CMakeFiles/APythonInterpreter.dir/TypeDescriptor.cpp.o: \
-  /Users/cebastiansantiago/CLionProjects/project3/TypeDescriptor.cpp \
+  /Users/cebastiansantiago/CLionProjects/CS450/TypeDescriptor.cpp \
   /Library/Developer/CommandLineTools/SDKs/MacOSX12.3.sdk/usr/include/c++/v1/iostream \
   /Library/Developer/CommandLineTools/SDKs/MacOSX12.3.sdk/usr/include/c++/v1/__config \
   /Library/Developer/CommandLineTools/SDKs/MacOSX12.3.sdk/usr/include/c++/v1/__config_site \
@@ -414,4 +414,4 @@ CMakeFiles/APythonInterpreter.dir/TypeDescriptor.cpp.o: \
   /Library/Developer/CommandLineTools/SDKs/MacOSX12.3.sdk/usr/include/sys/_types/_fsfilcnt_t.h \
   /Library/Developer/CommandLineTools/SDKs/MacOSX12.3.sdk/usr/include/_types/_nl_item.h \
   /Library/Developer/CommandLineTools/SDKs/MacOSX12.3.sdk/usr/include/c++/v1/__bsd_locale_defaults.h \
-  /Users/cebastiansantiago/CLionProjects/project3/TypeDescriptor.hpp
+  /Users/cebastiansantiago/CLionProjects/CS450/TypeDescriptor.hpp

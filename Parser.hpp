@@ -23,8 +23,9 @@ public:
     Statement *assignStatement();
     Statement *print_quick(std::string keys);
     ExprNode *print();
-    Statement * forstatement();
+    //Statement * forstatement();
     Statement * ifstatement();
+    ForStatement *forStatement();
     //ExprNode *expr();
     //ExprNode *term();
     //ExprNode *primary();
@@ -46,15 +47,19 @@ private:
     ExprNode *or_test();
 
     ExprNode *test();
-
     ExprNode *arith_expr();
 
     ExprNode *factor();
 
     ExprNode *atoms();
 
-
     ExprNode *term();
+
+    PrintStatement *printStatement();
+
+    Statements *suite();
+
+    IfStatement *ifStatement();
 };
 
 

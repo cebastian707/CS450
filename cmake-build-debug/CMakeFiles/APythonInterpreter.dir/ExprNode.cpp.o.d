@@ -1,5 +1,5 @@
 CMakeFiles/APythonInterpreter.dir/ExprNode.cpp.o: \
-  /Users/cebastiansantiago/CLionProjects/project3/ExprNode.cpp \
+  /Users/cebastiansantiago/CLionProjects/CS450/ExprNode.cpp \
   /Library/Developer/CommandLineTools/SDKs/MacOSX12.3.sdk/usr/include/c++/v1/iostream \
   /Library/Developer/CommandLineTools/SDKs/MacOSX12.3.sdk/usr/include/c++/v1/__config \
   /Library/Developer/CommandLineTools/SDKs/MacOSX12.3.sdk/usr/include/c++/v1/__config_site \
@@ -414,10 +414,10 @@ CMakeFiles/APythonInterpreter.dir/ExprNode.cpp.o: \
   /Library/Developer/CommandLineTools/SDKs/MacOSX12.3.sdk/usr/include/sys/_types/_fsfilcnt_t.h \
   /Library/Developer/CommandLineTools/SDKs/MacOSX12.3.sdk/usr/include/_types/_nl_item.h \
   /Library/Developer/CommandLineTools/SDKs/MacOSX12.3.sdk/usr/include/c++/v1/__bsd_locale_defaults.h \
-  /Users/cebastiansantiago/CLionProjects/project3/ExprNode.hpp \
-  /Users/cebastiansantiago/CLionProjects/project3/Token.hpp \
-  /Users/cebastiansantiago/CLionProjects/project3/SymTab.hpp \
-  /Users/cebastiansantiago/CLionProjects/project3/TypeDescriptor.hpp \
+  /Users/cebastiansantiago/CLionProjects/CS450/ExprNode.hpp \
+  /Users/cebastiansantiago/CLionProjects/CS450/Token.hpp \
+  /Users/cebastiansantiago/CLionProjects/CS450/SymTab.hpp \
+  /Users/cebastiansantiago/CLionProjects/CS450/TypeDescriptor.hpp \
   /Library/Developer/CommandLineTools/SDKs/MacOSX12.3.sdk/usr/include/c++/v1/map \
   /Library/Developer/CommandLineTools/SDKs/MacOSX12.3.sdk/usr/include/c++/v1/__functional/is_transparent.h \
   /Library/Developer/CommandLineTools/SDKs/MacOSX12.3.sdk/usr/include/c++/v1/__node_handle \

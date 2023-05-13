@@ -31,62 +31,110 @@ Statements *Parser::statements() {
 
     Statements *stmts = new Statements();
     Token tok = tokenizer.getToken();
-    while (tok.isName() || tok.isKeyword() || tok.isNewLineChar()) {
-        if (tok.isNewLineChar()){
-             tok = tokenizer.getToken();
-             //std::cout << "Skipping newline char"<<std::endl;
-             continue;
-        }
-        if (tok.getkeyword() == "for"){
-            Statement *stmt = forstatement();
-            stmts->addStatement(stmt);
-            tok = tokenizer.getToken();
-            while (tok.symbol() == '\n'||tok.symbol() == '}'){
-                tok = tokenizer.getToken();
-            }
-
-            if (tok.eof()){
-                break;
-            }
-
-        }
-
-        if (tok.getkeyword() == "if"){
-            Statement *stmt = ifstatement();
-            stmts->addStatement(stmt);
-
-            tok = tokenizer.getToken();
-            while (tok.symbol() == '\n'||tok.symbol() == '}'){
-                tok = tokenizer.getToken();
-            }
-
-            if (tok.eof()){
-                break;
-            }
-        }
-
-        if (tok.getkeyword() == "elif" || tok.getkeyword() == "else"){
-            break;
-        }
-
-
-        tokenizer.ungetToken();
-        Statement *assignStmt = assignStatement();
-        stmts->addStatement(assignStmt);
-
-
-       
+    while (tok.eol())
         tok = tokenizer.getToken();
-        while (tok.symbol() == '\n'){
-            tok = tokenizer.getToken();
+    while (tok.isName() || tok.isKeyword() || tok.isNewLineChar() || tok.isCommentChar()) {
+
+        if (tok.getkeyword() == "print") {
+            PrintStatement *printStmt = printStatement();
+            stmts->addStatement(printStmt);
         }
-        if (tok.getkeyword() == "elif" || tok.getkeyword() == "else"){
-            break;
+
+       else if (tok.getkeyword() == "for"){
+           ForStatement *forstmt = forStatement();
+            stmts->addStatement(forstmt);
+            tok = tokenizer.getToken();
+            if (tok.isName())
+                continue;
+            else
+                tokenizer.ungetToken();
+
+        }
+
+        else if (tok.getkeyword() == "if"){
+            IfStatement *ifStmt = ifStatement();
+            stmts->addStatement(ifStmt);
+        }
+
+        else if (tok.isName()){
+            tokenizer.ungetToken();
+            Statement *assignStmt = assignStatement();
+            stmts->addStatement(assignStmt);
+
+            tok = tokenizer.getToken();
+
+        }
+        else if (tok.isCmnt()) {
+            tok = tokenizer.getToken();
+            if (!tok.eol() && !tok.eof() && !tok.dedent())
+                die("Parser::statements", "Expected an eol token, instead got", tok);
+        }
+
+
+        if (!tok.eof()) {
+            tok = tokenizer.getToken();
+            while (tok.eol())
+                tok = tokenizer.getToken();
         }
     }
+    while (tok.eol())
+        tok = tokenizer.getToken();
     tokenizer.ungetToken();
     return stmts;
 }
+
+
+
+PrintStatement *Parser::printStatement() {
+    std::vector<ExprNode*> exprs;
+    Token tok = tokenizer.getToken();
+
+    // Check if the testlist starts with a left parenthesis
+    if (tok.symbol() != '('){
+        die("Parser::testlist", "Expected open-parenthesis, instead got", tok);
+    }
+
+    tok = tokenizer.getToken();
+    ExprNode *expr;
+
+    while (tok.symbol() != ')'){
+        if (tok.strings()){
+            tokenizer.ungetToken();
+            expr = atoms();
+            exprs.push_back(expr);
+            tok = tokenizer.getToken();
+        }
+        if (tok.symbol() ==  ')'){
+            break;
+        }
+
+        while (tok.symbol() == ','){
+            tok = tokenizer.getToken();
+        }
+
+        if (!tok.strings()){
+            tokenizer.ungetToken();
+            expr = test();
+            exprs.push_back(expr);
+            tok = tokenizer.getToken();
+        }
+        while (tok.symbol() == ','){
+            tok = tokenizer.getToken();
+        }
+        if (tok.symbol() ==  ')'){
+            break;
+        }
+    }
+
+        Token endLine = tokenizer.getToken();
+        if (!endLine.eol() && !endLine.eof() && !endLine.isCmnt() && !endLine.dedent())
+            die("Parser::printStatement", "Expected an end of line token, instead got", endLine);
+        if (endLine.eof() || endLine.isCmnt() || endLine.dedent())
+            tokenizer.ungetToken();
+
+        return new PrintStatement("Print", exprs);
+}
+
 
 Statement *Parser::assignStatement() {
     // Parses the following grammar rule
@@ -95,19 +143,8 @@ Statement *Parser::assignStatement() {
 
     Token varName = tokenizer.getToken();
     if (!varName.isName() && !varName.eof()) {
-        // If the token is a keyword, parse a print statement instead
-        if (varName.isKeyword() && varName.getkeyword() == "print") {
-            std::vector<ExprNode*> exprs = testlist();
-            Token close = tokenizer.getToken();
-            if (close.symbol() != '\n') {
-                die("Parser::assignStatement", "Expected an end of line token", close);
-            }
-            return new PrintStatement(varName.getkeyword(), exprs);
-        }
-
-        else {
             die("Parser::assignStatement", "Expected a name token or keyword, instead got", varName);
-        }
+
     }
 
     Token assignOp = tokenizer.getToken();
@@ -181,140 +218,20 @@ ExprNode *Parser::print() {
     return p;
 }
 
-Statement* Parser::forstatement() {
-    std::cout << "About to parse for loop"<<std::endl;
-    std::cout << "Key word  for has beened parsed"<<std::endl;
-
-    Token tok = tokenizer.getToken();
-
-    tokenizer.ungetToken();
-
-    //get the variable name
-    ExprNode* variable = test();
-
-
-    //look for the key word in
-    tok = tokenizer.getToken();
-
-    //if not key word in exit out
-    if (tok.getkeyword() != "in"){
-        die("Parser::forstatement", "Execpeted keyword in", tok);
-        exit(1);
-    }
-
-    //look for the keyword range
-    tok = tokenizer.getToken();
-
-    if (tok.getkeyword() != "range"){
-        die("Parser::forstatement", "Execpeted keyword range", tok);
-        exit(1);
-    }
-
-    //look for the open ( parenthesis
-    tok = tokenizer.getToken();
-
-    if (tok.symbol() != '('){
-        die("Parser::forstatement", "Execpeted (", tok);
-        exit(1);
-    }
-
-    //start parsing the range we need digits
-    std::vector<ExprNode*> nums;
-    ExprNode *start = test();
-    nums.push_back(start);
-
-
-    //start looking for the second number or look for a )
-    tok = tokenizer.getToken();
-
-    if (tok.symbol() == ','){
-        start = test();
-
-        nums.push_back(start);
-
-        tok = tokenizer.getToken();
-
-        if (tok.symbol() == ','){
-            start = test();
-            nums.push_back(start);
-            tok = tokenizer.getToken();
-        }
-
-    }
-
-
-    if (tok.symbol() != ')'){
-        die("Parser::forstatement", "Execpeted )", tok);
-        exit(1);
-    }
-
-    //look for the :
-    tok = tokenizer.getToken();
-
-    if (tok.symbol() != ':'){
-        die("Parser::forstatement", "Execpeted :", tok);
-        exit(1);
-    }
-
-
-    tok = tokenizer.getToken();
-
-    if (tok.symbol() != '\n'){
-        die("Parser::forstatement", "Execpeted newline", tok);
-        exit(1);
-    }
-
-    //parse the body of the for loop
-    Statements* body = statements();
-
-
-    ForStatement* forStmt = new ForStatement(variable,nums,body);
-
-    return forStmt;
-}
-
 std::vector<ExprNode*> Parser::testlist() {
-    std::vector<ExprNode*> exprs;
+    // This function parses the grammar rule:
+
+    // testlist: test {',' test}*
+
+    std::vector<ExprNode*> list;
+    list.push_back(test());
     Token tok = tokenizer.getToken();
-
-    // Check if the testlist starts with a left parenthesis
-    if (tok.symbol() != '('){
-        die("Parser::testlist", "Expected open-parenthesis, instead got", tok);
+    while (tok.symbol() == ',') {
+        list.push_back(test());
+        tok = tokenizer.getToken();
     }
-
-    tok = tokenizer.getToken();
-    ExprNode *expr;
-
-    while (tok.symbol() != ')'){
-        if (tok.strings()){
-            tokenizer.ungetToken();
-            expr = atoms();
-            exprs.push_back(expr);
-            tok = tokenizer.getToken();
-        }
-        if (tok.symbol() ==  ')'){
-            break;
-        }
-
-        while (tok.symbol() == ','){
-            tok = tokenizer.getToken();
-        }
-
-         if (!tok.strings()){
-            tokenizer.ungetToken();
-            expr = test();
-            exprs.push_back(expr);
-            tok = tokenizer.getToken();
-        }
-        while (tok.symbol() == ','){
-            tok = tokenizer.getToken();
-        }
-        if (tok.symbol() ==  ')'){
-            break;
-        }
-    }
-
-    return exprs;
+    tokenizer.ungetToken();
+    return list;
 }
 
 ExprNode *Parser::or_test() {
@@ -388,7 +305,7 @@ ExprNode* Parser::atoms() {
     // This function parses the grammar rule:
     // <atom> -> ID | NUMBER | STRING+ | '(' <expr> ')'
     Token tok = tokenizer.getToken();
-    if (tok.isName()) {
+    if (tok.isName() || tok.getkeyword() == "i") {
         return new Variable(tok);
     } else if (tok.isWholeNumber()) {
         return new WholeNumber(tok);
@@ -409,116 +326,119 @@ ExprNode* Parser::atoms() {
     }
 }
 
-Statement *Parser::ifstatement() {
-    //we've enter the if statement means the if statement word has been parsed
-    //know were looking for the test of the if statement
-    //create a vector of ExprNode
-    Token tok;
-    std::vector<ExprNode*> if_comparssion;
-    std::vector<ExprNode*> elif_comparssion;
-    std::vector<Statements*> elifs_body;
 
-    //call test to grab the boolean expression
-    ExprNode* tests = test();
-    if_comparssion.push_back(tests);
+ForStatement *Parser::forStatement() {
+    // This function parses the grammar rule:
 
-    //know look for the :
-    tok = tokenizer.getToken();
+    // for_stmt: 'for' ID 'in' 'range' '(' testlist ')'  ':' suite
 
-    if (tok.symbol() != ':'){
-        die("Parser::if statement", "Execpeted :", tok);
-        exit(1);
+    Token loopVar = tokenizer.getToken();
+    if (!loopVar.isName())
+        die("Parser::forStatement", "Expected a name token, instead got", loopVar);
+
+    Token t = tokenizer.getToken();
+
+    if (t.getkeyword() != "in")
+        die("Parser::forStatement", "Expected the 'in' keyword, instead got", t);
+
+    t = tokenizer.getToken();
+    if (t.getkeyword() != "range")
+        die("Parser::forStatement", "Expected the 'range' keyword, instead got", t);
+
+    t = tokenizer.getToken();
+    if (!t.isOpenParen())
+        die("Parser::forStatement", "Expected an open parenthesis, instead got", t);
+
+    std::vector<ExprNode*> args = testlist();
+
+    if (args.size() > 3) {
+        Token empty;
+        die("Parser::forStatement", "Expected a list of at most 3 integers, instead got more than 3 integers", empty);
     }
 
-    //know parse the body of the if statement
-    std::vector<Statements*> body;
+    t = tokenizer.getToken();
+    if (!t.isCloseParen())
+        die("Parser::forStatement", "Expected a close parenthesis, instead got", t);
 
-    Statements* if_body = statements();
+    t = tokenizer.getToken();
+    if (t.symbol() != ':')
+        die("Parser::forStatement", "Expected a colon, instead got", t);
 
-    body.push_back(if_body);
+    t = tokenizer.getToken();
+    if (t.isCmnt())
+        t = tokenizer.getToken();
+    if (t.eol())
+        tokenizer.ungetToken();
 
+    Statements *body = suite();
 
-    //check for ane elif statement
-    tok = tokenizer.getToken();
-
-    while (tok.getkeyword() == "elif"){
-        //parse the realtion experssion
-        ExprNode* eilf = test();
-        elif_comparssion.push_back(eilf);
-
-        //know look for the :
-        tok = tokenizer.getToken();
-
-        if (tok.symbol() != ':'){
-            die("Parser::elif statement", "Execpeted :", tok);
-            exit(1);
-        }
-
-        Statements* elif_body = statements();
-
-        elifs_body.push_back(elif_body);
-
-        //get a token again
-        tok = tokenizer.getToken();
-
-        //if there's no else were done and no more elifs statement done and return the 2nd constuctor
-        if (tok.getkeyword() != "elif" && tok.getkeyword() != "else"){
-            //return the 2nd constructor
-            IfStatement* elif = new IfStatement(if_comparssion,body,elif_comparssion,elifs_body);
-            return elif;
-
-        }
-
-        //if there's an else statement we know we need the 3rd constructor
-        if (tok.getkeyword() != "elif" && tok.getkeyword() == "else"){
-            //look for the :
-            tok = tokenizer.getToken();
-
-            if (tok.symbol() != ':'){
-                die("Parser::else statement", "Execpeted :", tok);
-                exit(1);
-            }
-
-            Statements* elses = statements();
-
-            IfStatement* elsess =  new IfStatement(if_comparssion,body,elif_comparssion,elifs_body,elses);
-
-            return elsess;
-
-        }
-    }
-
-    //if there's an else statement and no elif we know we need the 3rd constructor
-    if (tok.getkeyword() == "else"){
-        //look for the :
-        tok = tokenizer.getToken();
-
-        if (tok.symbol() != ':'){
-            die("Parser::else statement", "Execpeted :", tok);
-            exit(1);
-        }
-
-        Statements* elses = statements();
-
-        IfStatement* elsess =  new IfStatement(if_comparssion,body,elif_comparssion,elifs_body,elses);
-
-        return elsess;
-
-    }
-
-    //use constructor one
-    IfStatement* ifs = new IfStatement(if_comparssion,body);
-    return ifs;
+    return new ForStatement(loopVar, args, body);
 }
 
 
 
+Statements *Parser::suite() {
+    // This function parses the grammar rule:
 
+    // suite: NEWLINE INDENT stmt+ DEDENT
 
+    Token t = tokenizer.getToken();
+    if (t.isCmnt())
+        t = tokenizer.getToken();
+    if (!t.eol())
+        die("Parser::suite", "Expected an end of line token, instead got", t);
 
+    t = tokenizer.getToken();
+    while (t.eol())
+        t = tokenizer.getToken();
+    if (!t.indent())
+        die("Parser::suite", "Expected an indent token, instead got", t);
 
+    Statements *stmts = statements();
 
+    t = tokenizer.getToken();
+    if (!t.dedent() && !t.eof())
+        die("Parser::suite", "Expected a dedent token, instead got", t);
 
+    return stmts;
+}
+
+IfStatement *Parser::ifStatement() {
+    // This function parses the grammar rule:
+
+    // if_stmt: ’if’ test ’:’ suite {’elif’ test ’:’ suite}* [’else’ ’:’ suite]
+
+    std::vector<ExprNode*> conditions;
+    conditions.push_back(test());
+
+    Token t = tokenizer.getToken();
+    if (t.symbol() != ':')
+        die("Parser::ifStatement", "Expected a colon, instead got", t);
+
+    std::vector<Statements*> bodies;
+    bodies.push_back(suite());
+
+    t = tokenizer.getToken();
+    while (t.getkeyword() == "elif") {
+        conditions.push_back(test());
+        t = tokenizer.getToken();
+        if (t.symbol() != ':')
+            die("Parser::ifStatement", "Expected a colon, instead got", t);
+        bodies.push_back(suite());
+        t = tokenizer.getToken();
+    }
+
+    if (t.getkeyword() =="else") {
+        t = tokenizer.getToken();
+        if (t.symbol() != ':')
+            die("Parser::ifStatement", "Expected a colon, instead got", t);
+        bodies.push_back(suite());
+    }
+    else
+        tokenizer.ungetToken();
+
+    return new IfStatement(conditions, bodies);
+}
 
 
 

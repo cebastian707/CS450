@@ -2,7 +2,6 @@
 // Created by Ali Kooshesh on 4/4/23.
 //
 
-
 #include<iostream>
 #include "ExprNode.hpp"
 
@@ -30,14 +29,14 @@ TypeDescriptor* InfixExprNode::evaluate(SymTab &symTab) {
         //test case jaun if true return false
         TypeDescriptor* leftValue = left()->evaluate(symTab);
         if (dynamic_cast<NumberDescriptor *>(leftValue)->value.intValue == 1) {
-            TypeDescriptor* desc = new NumberDescriptor(TypeDescriptor::BOOL);
-            dynamic_cast<NumberDescriptor*>(desc)->value.boolValue = 0;
+            TypeDescriptor* desc = new NumberDescriptor(TypeDescriptor::INTEGER);
+            dynamic_cast<NumberDescriptor*>(desc)->value.intValue = 0;
             return desc;
         }
             //else return true
         else {
-            TypeDescriptor* desc = new NumberDescriptor(TypeDescriptor::BOOL);
-            dynamic_cast<NumberDescriptor*>(desc)->value.boolValue = 1;
+            TypeDescriptor* desc = new NumberDescriptor(TypeDescriptor::INTEGER);
+            dynamic_cast<NumberDescriptor*>(desc)->value.intValue = 1;
             return desc;
         }
     }
@@ -63,21 +62,21 @@ TypeDescriptor* InfixExprNode::evaluate(SymTab &symTab) {
     //or test case
     if (token().getkeyword() == "or"){
         //first test case if the left value is true  return true
-        if (dynamic_cast<NumberDescriptor *>(leftValue)->value.intValue == 1){
-            TypeDescriptor* desc = new NumberDescriptor(TypeDescriptor::BOOL);
-            dynamic_cast<NumberDescriptor*>(desc)->value.boolValue = 1;
+        if (dynamic_cast<NumberDescriptor *>(leftValue)->value.intValue != 0){
+            TypeDescriptor* desc = new NumberDescriptor(TypeDescriptor::INTEGER);
+            dynamic_cast<NumberDescriptor*>(desc)->value.intValue = 1;
             return desc;
         }
         //second test if left is false and right is true return true
-        else if (dynamic_cast<NumberDescriptor *>(leftValue)->value.intValue == 0 && dynamic_cast<NumberDescriptor*>(rightValue)->value.intValue ==1){
-            TypeDescriptor* desc = new NumberDescriptor(TypeDescriptor::BOOL);
-            dynamic_cast<NumberDescriptor*>(desc)->value.boolValue = 1;
+        else if (dynamic_cast<NumberDescriptor *>(leftValue)->value.intValue == 0 && dynamic_cast<NumberDescriptor*>(rightValue)->value.intValue != 0){
+            TypeDescriptor* desc = new NumberDescriptor(TypeDescriptor::INTEGER);
+            dynamic_cast<NumberDescriptor*>(desc)->value.intValue = 1;
             return desc;
         }
         //if both left and right are false return false
         else if (dynamic_cast<NumberDescriptor *>(leftValue)->value.intValue == 0 && dynamic_cast<NumberDescriptor*>(rightValue)->value.intValue == 0){
             TypeDescriptor* desc = new NumberDescriptor(TypeDescriptor::BOOL);
-            dynamic_cast<NumberDescriptor*>(desc)->value.boolValue = 0;
+            dynamic_cast<NumberDescriptor*>(desc)->value.intValue = 0;
             return desc;
         }
     }
@@ -86,21 +85,21 @@ TypeDescriptor* InfixExprNode::evaluate(SymTab &symTab) {
     if (token().getkeyword() == "and"){
         //first test case if the left value is false.return false
         if (dynamic_cast<NumberDescriptor *>(leftValue)->value.intValue == 0){
-            TypeDescriptor* desc = new NumberDescriptor(TypeDescriptor::BOOL);
-            dynamic_cast<NumberDescriptor*>(desc)->value.boolValue = 0;
+            TypeDescriptor* desc = new NumberDescriptor(TypeDescriptor::INTEGER);
+            dynamic_cast<NumberDescriptor*>(desc)->value.intValue = 0;
             return desc;
         }
         //second test case is if left value and right value is true return true
-        else if (dynamic_cast<NumberDescriptor *>(leftValue)->value.intValue == 1 && dynamic_cast<NumberDescriptor*>(rightValue)->value.intValue == 1){
-            TypeDescriptor* desc = new NumberDescriptor(TypeDescriptor::BOOL);
-            dynamic_cast<NumberDescriptor*>(desc)->value.boolValue = 1;
+        else if (dynamic_cast<NumberDescriptor *>(leftValue)->value.intValue != 0 && dynamic_cast<NumberDescriptor*>(rightValue)->value.intValue == 1){
+            TypeDescriptor* desc = new NumberDescriptor(TypeDescriptor::INTEGER);
+            dynamic_cast<NumberDescriptor*>(desc)->value.intValue = 1;
             return desc;
         }
 
         //last test case if left value is true but the right value is false return false
-        else if (dynamic_cast<NumberDescriptor *>(leftValue)->value.intValue == 1 && dynamic_cast<NumberDescriptor*>(rightValue)->value.intValue == 0){
-            TypeDescriptor* desc = new NumberDescriptor(TypeDescriptor::BOOL);
-            dynamic_cast<NumberDescriptor*>(desc)->value.boolValue = 0;
+        else if (dynamic_cast<NumberDescriptor *>(leftValue)->value.intValue != 0 && dynamic_cast<NumberDescriptor*>(rightValue)->value.intValue == 0){
+            TypeDescriptor* desc = new NumberDescriptor(TypeDescriptor::INTEGER);
+            dynamic_cast<NumberDescriptor*>(desc)->value.intValue = 0;
             return desc;
         }
     }

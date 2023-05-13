@@ -101,8 +101,20 @@ public:
         _isdouble() = true;
         _istring = false;
     }
-
+    bool &indent()  { return _indent; }
+    bool indent() const { return _indent; }
+    bool &isCmnt() { return _iscomment; }
+    bool &dedent()  { return _dedent; }
+    bool dedent() const { return _dedent; }
+    void setCmnt(std::string s) {
+        _comment = s;
+        isCmnt() = true;
+    }
 private:
+    bool _iscomment;
+    std::string _comment;
+    bool _indent;
+    bool _dedent;
     std::string _name;
     bool _eof, _eol;
     bool _isWholeNumber;
